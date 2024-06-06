@@ -4,8 +4,8 @@ import org.hibernate.validator.constraints.Length;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Positive;
 
 public class UpdateEmployeeDTO {
 
@@ -41,6 +41,7 @@ public class UpdateEmployeeDTO {
   private String finishDate;
 
   @Max(40)
+  @Positive
   private int hoursPerWeek;
  
   @Override
