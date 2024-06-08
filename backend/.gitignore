@@ -5,9 +5,7 @@ target/
 !**/src/test/**/target/
 !**/src/main/**/resources/
 src/main/resources
-Dockerfile
-.dockerignore
-compose.yaml
+
 ### STS ###
 .apt_generated
 .classpath
