@@ -36,7 +36,7 @@ const schema = z.object({
       message: "Mobile number can have at most 10 digits",
     })
     .regex(new RegExp("^04\\d+$"), {
-      message: "Only digits are allowed for mobile number",
+      message: "Only digits are allowed for mobile number 04xxxxxxxx",
     }),
   hoursPerWeek: z.coerce
     .number({

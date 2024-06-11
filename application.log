@@ -1,0 +1,63 @@
+2024-06-11T12:51:36.184+10:00  INFO 2952 --- [todo] [restartedMain] com.projects.todo.TodoApplication        : Starting TodoApplication using Java 22.0.1 with PID 2952 (C:\Users\ammar\Nology\zambia\Projects\todo\target\classes started by ammara in C:\Users\ammar\Nology\zambia\Projects\employee-creator)
+2024-06-11T12:51:36.269+10:00  INFO 2952 --- [todo] [restartedMain] com.projects.todo.TodoApplication        : No active profile set, falling back to 1 default profile: "default"
+2024-06-11T12:51:36.541+10:00  INFO 2952 --- [todo] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2024-06-11T12:51:36.547+10:00  INFO 2952 --- [todo] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2024-06-11T12:51:44.122+10:00  INFO 2952 --- [todo] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-06-11T12:51:44.344+10:00  INFO 2952 --- [todo] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 177 ms. Found 2 JPA repository interfaces.
+2024-06-11T12:51:47.255+10:00  INFO 2952 --- [todo] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2024-06-11T12:51:47.313+10:00  INFO 2952 --- [todo] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-06-11T12:51:47.316+10:00  INFO 2952 --- [todo] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.20]
+2024-06-11T12:51:47.553+10:00  INFO 2952 --- [todo] [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-06-11T12:51:47.554+10:00  INFO 2952 --- [todo] [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 11004 ms
+2024-06-11T12:51:49.035+10:00  INFO 2952 --- [todo] [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-06-11T12:51:49.360+10:00  INFO 2952 --- [todo] [restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.4.4.Final
+2024-06-11T12:51:49.464+10:00  INFO 2952 --- [todo] [restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2024-06-11T12:51:50.413+10:00  INFO 2952 --- [todo] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-06-11T12:51:50.516+10:00  INFO 2952 --- [todo] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2024-06-11T12:51:51.488+10:00  INFO 2952 --- [todo] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@7d18947c
+2024-06-11T12:51:51.493+10:00  INFO 2952 --- [todo] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2024-06-11T12:51:54.337+10:00  INFO 2952 --- [todo] [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-06-11T12:51:54.488+10:00  INFO 2952 --- [todo] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-06-11T12:51:57.229+10:00  WARN 2952 --- [todo] [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-06-11T12:52:01.211+10:00  INFO 2952 --- [todo] [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2024-06-11T12:52:01.245+10:00  INFO 2952 --- [todo] [restartedMain] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint(s) beneath base path '/actuator'
+2024-06-11T12:52:01.581+10:00  INFO 2952 --- [todo] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path ''
+2024-06-11T12:52:01.626+10:00  INFO 2952 --- [todo] [restartedMain] com.projects.todo.TodoApplication        : Started TodoApplication in 27.633 seconds (process running for 30.456)
+2024-06-11T12:52:12.198+10:00  INFO 2952 --- [todo] [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-06-11T12:52:12.199+10:00  INFO 2952 --- [todo] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2024-06-11T12:52:12.202+10:00  INFO 2952 --- [todo] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2024-06-11T13:05:57.913+10:00  INFO 2952 --- [todo] [http-nio-8080-exec-3] com.projects.todo.task.TaskController    : Getting All Tasks with categoryId=null sortBy=null sortOrder=null
+2024-06-11T13:05:57.919+10:00  INFO 2952 --- [todo] [http-nio-8080-exec-9] c.p.todo.category.CategoryController     : Getting All Categorys
+2024-06-11T13:05:58.081+10:00  INFO 2952 --- [todo] [http-nio-8080-exec-4] c.p.todo.category.CategoryController     : Getting All Categorys
+2024-06-11T13:05:58.113+10:00  INFO 2952 --- [todo] [http-nio-8080-exec-3] com.projects.todo.task.TaskController    : Getting All Tasks with categoryId=null sortBy=null sortOrder=null
+2024-06-11T13:09:01.728+10:00  INFO 21612 --- [todo] [restartedMain] com.projects.todo.TodoApplication        : Starting TodoApplication using Java 22.0.1 with PID 21612 (C:\Users\ammar\Nology\zambia\Projects\todo\target\classes started by ammara in C:\Users\ammar\Nology\zambia\Projects\employee-creator)
+2024-06-11T13:09:01.732+10:00  INFO 21612 --- [todo] [restartedMain] com.projects.todo.TodoApplication        : No active profile set, falling back to 1 default profile: "default"
+2024-06-11T13:09:01.928+10:00  INFO 21612 --- [todo] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2024-06-11T13:09:01.931+10:00  INFO 21612 --- [todo] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2024-06-11T13:09:06.946+10:00  INFO 21612 --- [todo] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-06-11T13:09:07.076+10:00  INFO 21612 --- [todo] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 118 ms. Found 2 JPA repository interfaces.
+2024-06-11T13:09:09.437+10:00  INFO 21612 --- [todo] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2024-06-11T13:09:09.832+10:00  INFO 21612 --- [todo] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-06-11T13:09:09.835+10:00  INFO 21612 --- [todo] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.20]
+2024-06-11T13:09:10.367+10:00  INFO 21612 --- [todo] [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-06-11T13:09:10.373+10:00  INFO 21612 --- [todo] [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 8437 ms
+2024-06-11T13:09:12.316+10:00  INFO 21612 --- [todo] [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-06-11T13:09:12.515+10:00  INFO 21612 --- [todo] [restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.4.4.Final
+2024-06-11T13:09:12.650+10:00  INFO 21612 --- [todo] [restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2024-06-11T13:09:13.141+10:00  INFO 21612 --- [todo] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-06-11T13:09:13.191+10:00  INFO 21612 --- [todo] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2024-06-11T13:09:13.911+10:00  INFO 21612 --- [todo] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@14c258f4
+2024-06-11T13:09:13.916+10:00  INFO 21612 --- [todo] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2024-06-11T13:09:16.438+10:00  INFO 21612 --- [todo] [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-06-11T13:09:16.574+10:00  INFO 21612 --- [todo] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-06-11T13:09:18.856+10:00  WARN 21612 --- [todo] [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-06-11T13:09:21.924+10:00  INFO 21612 --- [todo] [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2024-06-11T13:09:21.952+10:00  INFO 21612 --- [todo] [restartedMain] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint(s) beneath base path '/actuator'
+2024-06-11T13:09:22.161+10:00  INFO 21612 --- [todo] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path ''
+2024-06-11T13:09:22.188+10:00  INFO 21612 --- [todo] [restartedMain] com.projects.todo.TodoApplication        : Started TodoApplication in 21.666 seconds (process running for 23.207)
+2024-06-11T13:09:22.351+10:00  INFO 21612 --- [todo] [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-06-11T13:09:22.353+10:00  INFO 21612 --- [todo] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2024-06-11T13:09:22.358+10:00  INFO 21612 --- [todo] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 5 ms
+2024-06-11T13:14:45.114+10:00  INFO 21612 --- [todo] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-06-11T13:14:45.126+10:00  INFO 21612 --- [todo] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2024-06-11T13:14:45.152+10:00  INFO 21612 --- [todo] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.

@@ -1,14 +1,14 @@
 export interface Employee {
   id: number;
   firstName: string;
-  middleName: string;
+  middleName: string | null;
   lastName: string;
   email: string;
   mobileNumber: string;
   address: string;
   contractType: ContractType;
   startDate: Date;
-  finishDate: Date;
+  finishDate: Date | null;
   employmentType: EmploymentType;
   hoursPerWeek: number;
 }

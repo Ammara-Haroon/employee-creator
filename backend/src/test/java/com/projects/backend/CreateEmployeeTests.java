@@ -1,6 +1,7 @@
 package com.projects.backend;
 
 
+import org.apache.coyote.BadRequestException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Optional;
+
 import com.projects.backend.employee.EmployeeService;
 import com.projects.backend.employee.EmploymentType;
 
@@ -49,7 +52,11 @@ public class CreateEmployeeTests {
     emp.setEmploymentType(EmploymentType.PART_TIME);
     emp.setHoursPerWeek(40);
 		
-    when(this.employeeService.create(any(CreateEmployeeDTO.class))).thenReturn(emp);
+    try {
+      when(this.employeeService.create(any(CreateEmployeeDTO.class))).thenReturn(Optional.of(emp));
+    } catch (BadRequestException e) {
+      e.printStackTrace();
+    }
     
   }
   

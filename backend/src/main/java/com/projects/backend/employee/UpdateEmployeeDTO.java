@@ -34,19 +34,18 @@ public class UpdateEmployeeDTO {
   @EmploymentTypeConstraint
   private String employmentType;
 
-  @Pattern(regexp="\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])",message="date format should be yyyy-mm-dd")
+  @Pattern(regexp="^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1]).*$",message="date format should be yyyy-mm-dd")
   private String startDate;
 
-  @Pattern(regexp="\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])",message="date format should be yyyy-mm-dd")
+  @Pattern(regexp="^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1]).*$",message="date format should be yyyy-mm-dd")
   private String finishDate;
 
-  @Max(40)
-  @Positive
-  private int hoursPerWeek;
+  @Pattern(regexp="[1-9]|[1-3][0-9]|40",message="hours per week can be only be 1-40 inclusive")
+  private String hoursPerWeek;
  
   @Override
   public String toString() {
-    return "CreateEmployeeDTO [firstName=" + firstName + ", middleName=" + middleName + ", lastName=" + lastName
+    return "UpdateEmployeeDTO [firstName=" + firstName + ", middleName=" + middleName + ", lastName=" + lastName
         + ", email=" + email + ", mobileNumber=" + mobileNumber + ", address=" + address + ", contractType="
         + contractType + ", employmentType=" + employmentType + ", startDate=" + startDate + ", finishDate="
         + finishDate + ", hoursPerWeek=" + hoursPerWeek + " ]";
@@ -94,7 +93,7 @@ public class UpdateEmployeeDTO {
 
 
 
-  public int getHoursPerWeek() {
+  public String getHoursPerWeek() {
     return hoursPerWeek;
   }
 }

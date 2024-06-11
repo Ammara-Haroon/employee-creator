@@ -1,6 +1,14 @@
 package com.projects.backend.employee;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import org.hibernate.validator.constraints.Length;
+
+import jakarta.validation.ValidationException;
+import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -39,16 +47,17 @@ public class CreateEmployeeDTO {
   private String employmentType;
 
   @NotBlank
-  @Pattern(regexp="\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])",message="date format should be yyyy-mm-dd")
+  @Pattern(regexp="\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1]).*",message="date format should be yyyy-mm-dd")
   private String startDate;
 
-  @Pattern(regexp="\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])",message="date format should be yyyy-mm-dd")
+  @Pattern(regexp="\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1]).*",message="date format should be yyyy-mm-dd")
   private String finishDate;
 
   @Min(1)
   @Max(40)
   private int hoursPerWeek;
 
+  
   
   @Override
   public String toString() {

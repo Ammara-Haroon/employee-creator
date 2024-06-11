@@ -3,9 +3,13 @@ package com.projects.backend.employee;
 import java.util.List;
 import java.util.Optional;
 
+import javax.swing.text.html.Option;
+
+import org.apache.coyote.BadRequestException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException.BadRequest;
 
 import jakarta.transaction.Transactional;
 
@@ -33,11 +37,13 @@ public class EmployeeService {
     return true;  
   }
 
-  public Employee create(CreateEmployeeDTO data) {
+  public Optional<Employee> create(CreateEmployeeDTO data) throws BadRequestException {
     Employee newEmployee = mapper.map(data,Employee.class);
-    this.repo.save(newEmployee);    
-    return newEmployee;
+    if(newEmployee.getFinishDate() != null && newEmployee.getStartDate().compareTo(newEmployee.getFinishDate()) > 0){
+      return Optional.empty();
+    }
     
+    return Optional.of(this.repo.save(newEmployee));    
   }
 
   public Optional<Employee> updateById(Long id, UpdateEmployeeDTO data) {
@@ -45,6 +51,9 @@ public class EmployeeService {
     if(maybeEmployee.isPresent()) {
       Employee foundEmployee = maybeEmployee.get();
       mapper.map(data,foundEmployee);
+      if(foundEmployee.getFinishDate() != null && foundEmployee.getStartDate().compareTo(foundEmployee.getFinishDate()) > 0){
+      return Optional.empty();
+    }
       return Optional.of(this.repo.save(foundEmployee));
     }
     return maybeEmployee;

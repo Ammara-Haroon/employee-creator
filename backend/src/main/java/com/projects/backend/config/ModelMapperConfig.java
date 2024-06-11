@@ -57,6 +57,7 @@ public class ModelMapperConfig {
         .addMappings(m -> m.using(new AddressConverter()).map(UpdateEmployeeDTO::getAddress, Employee::setAddress))
         .addMappings(m -> m.using(new EmployeeTypeConverter()).map(UpdateEmployeeDTO::getEmploymentType, Employee::setEmploymentType))
         .addMappings(m -> m.using(new ContractTypeConverter()).map(UpdateEmployeeDTO::getContractType, Employee::setContractType))
+        .addMappings(m -> m.using(new IntTypeConverter()).map(UpdateEmployeeDTO::getHoursPerWeek, Employee::setHoursPerWeek))
          ;
     
     return mapper;
@@ -74,6 +75,18 @@ public class ModelMapperConfig {
 
   }
 
+  private class IntTypeConverter implements Converter<String, Integer> {
+
+    @Override
+    public Integer convert(MappingContext<String, Integer> context) {
+      if (context.getSource() == null) {
+        return null;
+      }
+      return Integer.parseInt(context.getSource());
+    }
+
+  }
+
   private class DateConverter implements Converter<String, Date> {
     @Override
     public Date convert(MappingContext<String, Date> context) {
@@ -83,11 +96,11 @@ public class ModelMapperConfig {
       DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
       Date date;
       try {
-        date = formatter.parse(context.getSource());
+        date = formatter.parse(context.getSource().substring(0,10));
       } catch (ParseException e) {
         
         e.printStackTrace();
-        throw new ValidationException("Erro in date format - should be yyyy-MM-dd");
+        throw new ValidationException("Error in date format - should be yyyy-MM-dd");
       }
       return date;
     }

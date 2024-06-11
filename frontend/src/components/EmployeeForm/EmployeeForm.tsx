@@ -14,21 +14,16 @@ import {
   Employee,
   EmploymentType,
 } from "../../services/APIResponseInterface";
+import { useQueryClient } from "@tanstack/react-query";
+import { Mode } from "../../pages/EmployeeFormPage/Mode";
 
 registerLocale("en-AU", enAU);
-
-const EmployeeForm = () => {
-  // interface FormInput {
-  //   firstName: string;
-  //   middleName: string;
-  //   lastName: string;
-  //   email: string;
-  //   mobile: string;
-  //   address: string;
-  //   contractType:ContractType;
-  //   employmentType:EmploymentType;
-  //   startDate : Date
-  // }
+interface IEmployeeFormProps {
+  mode: Mode;
+  saveEmployee(emp: Employee): unknown;
+  employee: Employee | undefined;
+}
+const EmployeeForm = ({ mode, employee, saveEmployee }: IEmployeeFormProps) => {
   const {
     register,
     handleSubmit,
@@ -36,21 +31,37 @@ const EmployeeForm = () => {
   } = useForm<Employee>({
     resolver: zodResolver(schema),
     defaultValues: {
-      startDate: new Date(),
-      employmentType: EmploymentType.FULL_TIME,
-      contractType: ContractType.PERMANENT,
+      startDate: mode === Mode.EDIT ? employee?.startDate : new Date(),
+      employmentType:
+        mode === Mode.EDIT
+          ? employee?.employmentType
+          : EmploymentType.FULL_TIME,
+      contractType:
+        mode === Mode.EDIT ? employee?.contractType : ContractType.PERMANENT,
+      firstName: mode === Mode.EDIT ? employee?.firstName : "",
+      middleName: mode === Mode.EDIT ? employee?.middleName : "",
+      lastName: mode === Mode.EDIT ? employee?.lastName : "",
+      address: mode === Mode.EDIT ? employee?.address : "",
+      email: mode === Mode.EDIT ? employee?.email : "",
+      finishDate: mode === Mode.EDIT ? employee?.finishDate : null,
+      hoursPerWeek: mode === Mode.EDIT ? employee?.hoursPerWeek : undefined,
+      mobileNumber: mode === Mode.EDIT ? employee?.mobileNumber : "",
     },
   });
-  const [startDate, setStartDate] = useState<Date | null>(new Date());
+  //const queryClient = useQueryClient();
+  const [startDate, setStartDate] = useState<Date>(new Date());
+  const [finishDate, setFinishDate] = useState<Date | null>(null);
   const onSubmit: SubmitHandler<Employee> = (data) => {
     if (startDate) data.startDate = startDate;
-
+    data.finishDate = finishDate;
+    if (data.middleName === "") data.middleName = null;
     console.log(data);
+    if (mode === Mode.EDIT && employee?.id) data.id = employee.id;
+    saveEmployee(data);
   };
 
   return (
     <div>
-      <Link to="/employee-creator">Back</Link>
       <h1>Employee Details</h1>
       <form onSubmit={handleSubmit(onSubmit)}>
         <h2>Personal Information</h2>
@@ -115,6 +126,7 @@ const EmployeeForm = () => {
           />
           {errors.address && <span>{errors.address.message}</span>}
         </div>
+        <h2>Employee Status</h2>
         <div>
           <label>Contract Type</label>
           <div>
@@ -141,11 +153,25 @@ const EmployeeForm = () => {
           <label htmlFor="startDate">Starting Date</label>
           <DatePicker
             onChange={(date) => {
-              return setStartDate(date);
+              if (date) return setStartDate(date);
+              else return new Date();
             }}
             selected={startDate}
             dateFormat="dd/MM/yyyy"
             locale="en-AU"
+            id="startDate"
+          />
+        </div>
+        <div>
+          <label htmlFor="finishDate">Finishing Date</label>
+          <DatePicker
+            onChange={(date) => {
+              setFinishDate(date);
+            }}
+            selected={finishDate}
+            dateFormat="dd/MM/yyyy"
+            locale="en-AU"
+            id="finishDate"
           />
         </div>
         <div>
