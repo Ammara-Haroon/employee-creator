@@ -1,11 +1,17 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import tailwindcss from "tailwindcss";
+// <reference types="vitest" />
 
-// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  //base: "/employee-creator",
+
   server: {
     host: true,
+  },
+  css: {
+    postcss: {
+      plugins: [tailwindcss()],
+    },
   },
 });

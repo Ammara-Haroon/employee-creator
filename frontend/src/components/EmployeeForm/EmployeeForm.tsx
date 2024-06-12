@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import schema from "./schema";
 import DatePicker, { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -31,7 +31,6 @@ const EmployeeForm = ({ mode, employee, saveEmployee }: IEmployeeFormProps) => {
   } = useForm<Employee>({
     resolver: zodResolver(schema),
     defaultValues: {
-      startDate: mode === Mode.EDIT ? employee?.startDate : new Date(),
       employmentType:
         mode === Mode.EDIT
           ? employee?.employmentType
@@ -43,14 +42,16 @@ const EmployeeForm = ({ mode, employee, saveEmployee }: IEmployeeFormProps) => {
       lastName: mode === Mode.EDIT ? employee?.lastName : "",
       address: mode === Mode.EDIT ? employee?.address : "",
       email: mode === Mode.EDIT ? employee?.email : "",
-      finishDate: mode === Mode.EDIT ? employee?.finishDate : null,
       hoursPerWeek: mode === Mode.EDIT ? employee?.hoursPerWeek : undefined,
       mobileNumber: mode === Mode.EDIT ? employee?.mobileNumber : "",
     },
   });
-  //const queryClient = useQueryClient();
-  const [startDate, setStartDate] = useState<Date>(new Date());
-  const [finishDate, setFinishDate] = useState<Date | null>(null);
+  const [startDate, setStartDate] = useState<Date>(
+    employee?.startDate || new Date()
+  );
+  const [finishDate, setFinishDate] = useState<Date | null>(
+    employee?.finishDate || null
+  );
   const onSubmit: SubmitHandler<Employee> = (data) => {
     if (startDate) data.startDate = startDate;
     data.finishDate = finishDate;
@@ -59,78 +60,151 @@ const EmployeeForm = ({ mode, employee, saveEmployee }: IEmployeeFormProps) => {
     if (mode === Mode.EDIT && employee?.id) data.id = employee.id;
     saveEmployee(data);
   };
+  const handleChange = (date: Date) => {
+    let tmpStartDate: Date;
 
+    if (date) {
+      tmpStartDate = date;
+    } else {
+      tmpStartDate = new Date();
+    }
+    if (finishDate && finishDate < tmpStartDate) {
+      setFinishDate(tmpStartDate);
+    }
+    setStartDate(tmpStartDate);
+  };
+  const validateAndSetFinishDate = (date: Date | null) => {
+    console.log(date, typeof startDate, date && date < startDate);
+
+    if (date && date < startDate) {
+      setFinishDate(startDate);
+      return;
+    }
+    setFinishDate(date);
+  };
+  const genericInputStyle =
+    "p-2 border border-cyan-900 focus:outline-none focus:border-teal-400 focus:ring-2";
+  const inputStyleClass = genericInputStyle + " max-w-1/2 w-80";
+
+  const inputWrapperStyleClass = "px-3 flex flex-col";
+  const sectionHeadingStyleClass =
+    "text-xl font-bold text-cyan-900 uppercase pt-7 pb-4";
+  const radioGroupStyleClass = "px-3 py-2";
+  const radioButtonStyleClass = "m-2";
+  const errorStyleClass = "text-rose-800";
   return (
-    <div>
-      <h1>Employee Details</h1>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <h2>Personal Information</h2>
-        <div>
-          <label htmlFor="firstName">First name</label>
+    <div className="px-2 bg-gray-100">
+      <h1 className="py-3 text-2xl font-bold text-cyan-900 uppercase ">
+        Employee Details
+      </h1>
+      <form
+        className="text-slate-800 font-semibold p-2"
+        onSubmit={handleSubmit(onSubmit)}
+      >
+        <h2 className={sectionHeadingStyleClass}>Personal Information</h2>
+        <div className={inputWrapperStyleClass}>
+          <label htmlFor="firstName">First Name:</label>
           <input
+            className={inputStyleClass}
             type="text"
             placeholder="John"
             id="firstName"
             {...register("firstName")}
           />
-          {errors.firstName && <span>{errors.firstName.message}</span>}
+          {errors.firstName ? (
+            <small className={errorStyleClass}>
+              {errors.firstName.message}
+            </small>
+          ) : (
+            <small>&#8203;</small>
+          )}
         </div>
-        <div>
+        <div className={inputWrapperStyleClass}>
           <label htmlFor="middleName">Middle name</label>
           <input
+            className={inputStyleClass}
             placeholder="---"
             type="text"
             id="middleName"
             {...register("middleName")}
           />
-          {errors.middleName && <span>{errors.middleName.message}</span>}
+          {errors.middleName ? (
+            <small className={errorStyleClass}>
+              {errors.middleName.message}
+            </small>
+          ) : (
+            <small>&#8203;</small>
+          )}
         </div>
-        <div>
+        <div className={inputWrapperStyleClass}>
           <label htmlFor="lastName">Last name</label>
           <input
+            className={inputStyleClass}
             type="text"
             placeholder="Smith"
             id="lastName"
             {...register("lastName")}
           />
-          {errors.lastName && <span>{errors.lastName.message}</span>}
+          {errors.lastName ? (
+            <small className={errorStyleClass}>{errors.lastName.message}</small>
+          ) : (
+            <small>&#8203;</small>
+          )}
         </div>
-        <h2>Contact Details</h2>
-        <div>
+        <h2 className={sectionHeadingStyleClass}>Contact Details</h2>
+        <div className={inputWrapperStyleClass}>
           <label htmlFor="email">Email</label>
           <input
+            className={inputStyleClass}
             type="text"
             placeholder="john.smith@somemail.com"
             id="email"
             {...register("email")}
           />
-          {errors.email && <span>{errors.email.message}</span>}
+          {errors.email ? (
+            <small className={errorStyleClass}>{errors.email.message}</small>
+          ) : (
+            <small>&#8203;</small>
+          )}
         </div>
-        <div>
+        <div className={inputWrapperStyleClass}>
           <label htmlFor="mobileNumber">Mobile Number</label>
           <input
-            type="text"
+            className={inputStyleClass}
+            type="tel"
             placeholder="04xxxxxxxxxx"
             id="mobileNumber"
             {...register("mobileNumber")}
           />
-          {errors.mobileNumber && <span>{errors.mobileNumber.message}</span>}
+          {errors.mobileNumber ? (
+            <small className={errorStyleClass}>
+              {errors.mobileNumber.message}
+            </small>
+          ) : (
+            <small>&#8203;</small>
+          )}
         </div>
-        <div>
+        <div className={inputWrapperStyleClass}>
           <label htmlFor="address">Address</label>
           <input
+            className={genericInputStyle + " w-full"}
             type="text"
             placeholder="1 Example Pl, Sydney, NSW 2000"
             id="address"
             {...register("address")}
           />
-          {errors.address && <span>{errors.address.message}</span>}
+          {errors.address ? (
+            <small className={errorStyleClass}>{errors.address.message}</small>
+          ) : (
+            <small>&#8203;</small>
+          )}
         </div>
-        <h2>Employee Status</h2>
-        <div>
-          <label>Contract Type</label>
+        <h2 className={sectionHeadingStyleClass}>Employment Status</h2>
+        <div className={radioGroupStyleClass}>
+          <label>What is contract type?</label>
           <div>
             <input
+              className={radioButtonStyleClass}
               type="radio"
               id="permanent"
               value="PERMANENT"
@@ -141,6 +215,7 @@ const EmployeeForm = ({ mode, employee, saveEmployee }: IEmployeeFormProps) => {
 
           <div>
             <input
+              className={radioButtonStyleClass}
               type="radio"
               id="contract"
               value="CONTRACT"
@@ -149,24 +224,23 @@ const EmployeeForm = ({ mode, employee, saveEmployee }: IEmployeeFormProps) => {
             <label htmlFor="contract">Contract</label>
           </div>
         </div>
-        <div>
+        <div className={inputWrapperStyleClass}>
           <label htmlFor="startDate">Starting Date</label>
           <DatePicker
-            onChange={(date) => {
-              if (date) return setStartDate(date);
-              else return new Date();
-            }}
+            className={genericInputStyle + " w-40"}
+            onChange={handleChange}
             selected={startDate}
             dateFormat="dd/MM/yyyy"
             locale="en-AU"
             id="startDate"
           />
         </div>
-        <div>
+        <div className={inputWrapperStyleClass}>
           <label htmlFor="finishDate">Finishing Date</label>
           <DatePicker
+            className={genericInputStyle + " w-40"}
             onChange={(date) => {
-              setFinishDate(date);
+              validateAndSetFinishDate(date);
             }}
             selected={finishDate}
             dateFormat="dd/MM/yyyy"
@@ -174,10 +248,11 @@ const EmployeeForm = ({ mode, employee, saveEmployee }: IEmployeeFormProps) => {
             id="finishDate"
           />
         </div>
-        <div>
-          <label>Employement Type</label>
+        <div className={radioGroupStyleClass}>
+          <label>Is it on full-time or part-time basis?</label>
           <div>
             <input
+              className={radioButtonStyleClass}
               type="radio"
               id="fullTime"
               value="FULL_TIME"
@@ -187,6 +262,7 @@ const EmployeeForm = ({ mode, employee, saveEmployee }: IEmployeeFormProps) => {
           </div>
           <div>
             <input
+              className={radioButtonStyleClass}
               type="radio"
               id="partTime"
               value="PART_TIME"
@@ -195,17 +271,31 @@ const EmployeeForm = ({ mode, employee, saveEmployee }: IEmployeeFormProps) => {
             <label htmlFor="partTime">Part-time</label>
           </div>
         </div>
-        <div>
+        <div className={inputWrapperStyleClass}>
           <label htmlFor="hoursPerWeek">Hours per week</label>
           <input
+            className="p-2 border border-cyan-900 focus:outline-none focus:border-teal-400 focus:ring-2 w-10"
             type="number"
             placeholder="1-40"
             id="hoursPerWeek"
             {...register("hoursPerWeek")}
           />
-          {errors.hoursPerWeek && <span>{errors.hoursPerWeek.message}</span>}
+          {errors.hoursPerWeek ? (
+            <small className={errorStyleClass}>
+              {errors.hoursPerWeek.message}
+            </small>
+          ) : (
+            <small>&#8203;</small>
+          )}
         </div>
-        <button type="submit">Submit</button>
+        <div className="flex justify-center">
+          <button
+            className="w-40 hover:bg-teal-500 mt-16-md mt-5 h-fit bg-cyan-800 px-5 py-3 rounded-full uppercase text-gray-200"
+            type="submit"
+          >
+            Save
+          </button>
+        </div>
       </form>
     </div>
   );

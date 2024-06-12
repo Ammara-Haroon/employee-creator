@@ -1,17 +1,15 @@
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-const ErrMsg = ({
-  msg,
-  closeMsg,
-}: {
-  msg: string;
-  closeMsg: () => unknown;
-}) => {
+const ErrMsg = ({ msg, onClose }: { msg: string; onClose: () => unknown }) => {
   return (
-    <div className="fixed flex justify-between w-1/2 px-4 py-2 text-gray-600 bg-gray-300 rounded bottom-10 border border-red-500">
-      <p>{msg}</p>
-      <FontAwesomeIcon icon={faXmark} onClick={closeMsg}></FontAwesomeIcon>
+    <div className="fixed h-fit bg-sky-100 rounded-lg w-fit px-10 py-10  right-12 bottom-10 border">
+      <FontAwesomeIcon
+        className="hover:text-cyan-900 p-2 absolute top-0 right-0 text-teal-500 text-right"
+        icon={faXmark}
+        onClick={onClose}
+      ></FontAwesomeIcon>
+      <p className="text-center text-slate-600">{msg}</p>
     </div>
   );
 };

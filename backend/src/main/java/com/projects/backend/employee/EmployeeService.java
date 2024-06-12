@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException.BadRequest;
 
 import jakarta.transaction.Transactional;
+import jakarta.validation.ValidationException;
 
 @Service
 @Transactional
@@ -37,22 +38,22 @@ public class EmployeeService {
     return true;  
   }
 
-  public Optional<Employee> create(CreateEmployeeDTO data) throws BadRequestException {
+  public Optional<Employee> create(CreateEmployeeDTO data) throws ValidationException {
     Employee newEmployee = mapper.map(data,Employee.class);
     if(newEmployee.getFinishDate() != null && newEmployee.getStartDate().compareTo(newEmployee.getFinishDate()) > 0){
-      return Optional.empty();
+      throw new ValidationException("finish date cannot be before start date");
     }
     
     return Optional.of(this.repo.save(newEmployee));    
   }
 
-  public Optional<Employee> updateById(Long id, UpdateEmployeeDTO data) {
+  public Optional<Employee> updateById(Long id, UpdateEmployeeDTO data) throws ValidationException{
     Optional<Employee> maybeEmployee = this.repo.findById(id);
     if(maybeEmployee.isPresent()) {
       Employee foundEmployee = maybeEmployee.get();
       mapper.map(data,foundEmployee);
       if(foundEmployee.getFinishDate() != null && foundEmployee.getStartDate().compareTo(foundEmployee.getFinishDate()) > 0){
-      return Optional.empty();
+      throw new ValidationException("finish date cannot be before start date");
     }
       return Optional.of(this.repo.save(foundEmployee));
     }

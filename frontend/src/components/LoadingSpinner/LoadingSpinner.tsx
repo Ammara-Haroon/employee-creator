@@ -7,7 +7,7 @@ const LoadingSpinner = () => {
       className="flex w-full h-full fixed z-10 bg-transparent justify-center items-center"
     >
       <FontAwesomeIcon
-        className="text-5xl text-rose-500 z-10"
+        className="text-5xl text-cyan-800 z-10"
         icon={faSpinner}
       />
     </div>

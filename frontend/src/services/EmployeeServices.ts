@@ -5,7 +5,11 @@ const SERVER_URL = import.meta.env.VITE_APP_SERVER_URL;
 export const getAllEmployees = async (): Promise<Employee[]> => {
   const response = await fetch(`${SERVER_URL}/employees`);
   const data = await response.json();
-  return data;
+  return data.map((entry: any) => ({
+    ...entry,
+    startDate: new Date(entry.startDate),
+    finishDate: entry.finishDate && new Date(entry.finishDate),
+  }));
 };
 
 export const createEmployee = async (data: Employee): Promise<Employee> => {
@@ -35,5 +39,6 @@ export const updateEmployee = async (data: Employee): Promise<Employee> => {
       "Content-Type": "application/json",
     },
   });
+  if (!response.ok) console.log(response.text);
   return await response.json();
 };

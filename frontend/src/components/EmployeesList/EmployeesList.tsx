@@ -19,16 +19,24 @@ const EmployeesList = ({ employeesList }: { employeesList: Employee[] }) => {
     mutation.mutate(id);
   };
   return (
-    <div>
-      {employeesList.map((employee) => (
-        <EmployeeCard
-          key={employee.id}
-          employee={employee}
-          handleEdit={handleEditEmployee}
-          handleDelete={handleDeleteEmployee}
-        />
-      ))}
-    </div>
+    <table className="table-fixed border w-full  border-black">
+      <thead className="bg-teal-500  text-slate-900">
+        <th className="uppercase p-2">Employee Name</th>
+        <th className="uppercase hidden sm:table-cell">Contract Type</th>
+        <th className="uppercase  hidden sm:table-cell">Employement Type</th>
+        <th className="uppercase"></th>
+      </thead>
+      <tbody>
+        {employeesList.map((employee) => (
+          <EmployeeCard
+            key={employee.id}
+            employee={employee}
+            handleEdit={handleEditEmployee}
+            handleDelete={handleDeleteEmployee}
+          />
+        ))}
+      </tbody>
+    </table>
   );
 };
 

@@ -54,7 +54,7 @@ public class CreateEmployeeTests {
 		
     try {
       when(this.employeeService.create(any(CreateEmployeeDTO.class))).thenReturn(Optional.of(emp));
-    } catch (BadRequestException e) {
+    } catch (Exception e) {
       e.printStackTrace();
     }
     

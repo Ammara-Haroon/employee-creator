@@ -6,6 +6,7 @@ import org.springframework.web.client.HttpClientErrorException.BadRequest;
 import com.projects.backend.exceptions.NotFoundException;
 
 import jakarta.validation.Valid;
+import jakarta.validation.ValidationException;
 
 import java.util.List;
 import java.util.Optional;
@@ -44,9 +45,14 @@ public class EmployeeController {
 
   @PatchMapping("/{id}")
   public ResponseEntity<Employee> updateEmployeeById(@PathVariable Long id, @Valid @RequestBody UpdateEmployeeDTO data)
-      throws NotFoundException {
+      throws NotFoundException, BadRequestException{
     System.out.println(data);    
-    Optional<Employee> maybeEmployee = this.employeeService.updateById(id, data);
+    Optional<Employee> maybeEmployee;
+    try {
+      maybeEmployee = this.employeeService.updateById(id, data);
+    } catch(ValidationException ve){
+      throw new BadRequestException(ve.getMessage());
+    }
     Employee updatedEmployee = maybeEmployee.orElseThrow(()->new NotFoundException(Employee.class.getSimpleName(), id));
     return new ResponseEntity<>(updatedEmployee, HttpStatus.OK);
   }
@@ -63,10 +69,14 @@ public class EmployeeController {
   
   @PostMapping()
   public ResponseEntity<Employee> createEmployee(@Valid @RequestBody CreateEmployeeDTO data) throws BadRequestException {
-    Optional<Employee> mayBeEmployee = this.employeeService.create(data);
-    if(mayBeEmployee.isEmpty()){
-      throw new BadRequestException("finish date should be ahead of start date");
-    }
+    Optional<Employee> mayBeEmployee;
+    try{
+    mayBeEmployee = this.employeeService.create(data);
+   
+  }catch(ValidationException ve)
+  {
+      throw new BadRequestException(ve.getMessage());
+  }
     Employee createdEmployee = mayBeEmployee.get();
     return new ResponseEntity<>(createdEmployee, HttpStatus.CREATED);
   }

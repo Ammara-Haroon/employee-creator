@@ -19,9 +19,13 @@ const schema = z.object({
     .regex(new RegExp("^[a-zA-Z]+$"), {
       message: "Only letters are allowed for last name.",
     }),
-  middleName: z.string().trim().regex(new RegExp("^[a-zA-Z]*$"), {
-    message: "Only letters are allowed for middle name.",
-  }),
+  middleName: z
+    .string()
+    .trim()
+    .regex(new RegExp("^[a-zA-Z]*$"), {
+      message: "Only letters are allowed for middle name.",
+    })
+    .nullable(),
   email: z.string().email({ message: "Invalid email address" }),
   address: z
     .string()
