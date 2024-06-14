@@ -30,3 +30,14 @@ export interface AuthState {
   authorities: string[];
   name: string | null;
 }
+
+export interface EmployeePageResponse {
+  content: Employee[];
+  empty: boolean;
+  first: boolean;
+  last: boolean;
+  number: number;
+  numberOfElements: number;
+  totalElements: number;
+  totalPages: number;
+}

@@ -1,15 +1,20 @@
-import { Employee } from "./APIResponseInterface";
+import { Employee, EmployeePageResponse } from "./APIResponseInterface";
 
 const SERVER_URL = import.meta.env.VITE_APP_SERVER_URL;
 
-export const getAllEmployees = async (): Promise<Employee[]> => {
-  const response = await fetch(`${SERVER_URL}/employees`);
+export const getAllEmployees = async (
+  currentPage: number = 0
+): Promise<EmployeePageResponse> => {
+  console.log(currentPage);
+  const response = await fetch(`${SERVER_URL}/employees?page=${currentPage}`);
   const data = await response.json();
-  return data.map((entry: any) => ({
+  console.log(data);
+  data.content = data.content.map((entry: any) => ({
     ...entry,
     startDate: new Date(entry.startDate),
     finishDate: entry.finishDate && new Date(entry.finishDate),
   }));
+  return data;
 };
 
 export const createEmployee = async (data: Employee): Promise<Employee> => {

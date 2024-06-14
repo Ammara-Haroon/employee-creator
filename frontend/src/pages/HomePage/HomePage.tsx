@@ -12,8 +12,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { show } from "../../features/Notifcations/NotificationSlice";
 
 import { RootState } from "../../app/store";
+import {
+  nextPage,
+  previousPage,
+  setPage,
+  updateTotalNumberOfPages,
+} from "../../features/QueryParams/QueryParamsSlice";
 
 const HomePage = () => {
+  const arr = new Array(7).fill(0).map((el, index) => index);
+
   const { authenticated } = useSelector((state: RootState) => state.auth);
   console.log("Home Page", authenticated);
   const dispatch = useDispatch();
@@ -24,13 +32,20 @@ const HomePage = () => {
     return <ErrMsg />;
   }
 
+  const { currentPage } = useSelector((state: RootState) => state.queryParams);
+  console.log("currentPage", currentPage);
   // Queries
+
   const { isLoading, isError, data } = useQuery({
-    queryKey: ["employees"],
-    queryFn: getAllEmployees,
+    queryKey: ["employees", currentPage],
+    queryFn: () => getAllEmployees(currentPage),
     onError: (err: any) => dispatch(show(err.message)),
     retry: false,
+    keepPreviousData: true,
   });
+  console.log("data in homepage", data);
+  dispatch(updateTotalNumberOfPages(data?.totalPages));
+
   const handleClick = (): void => {
     navigate("/add");
   };
@@ -50,9 +65,37 @@ const HomePage = () => {
           Add New Empoyee
         </button>
       </div>
+      {isLoading ? <span> Loading...</span> : null}{" "}
       {isLoading && <LoadingSpinner />}
       <ErrMsg />
-      {!isLoading && !isError && data && <EmployeesList employeesList={data} />}
+      {!isLoading && !isError && data && data.numberOfElements > 0 && (
+        <EmployeesList employeesList={data.content} />
+      )}
+      <button onClick={() => dispatch(previousPage())} disabled={data?.first}>
+        Previous Page
+      </button>
+      <select
+        defaultValue={currentPage}
+        onChange={(e) => {
+          console.log("selected page ", e.currentTarget.value);
+          dispatch(setPage(parseInt(e.currentTarget.value)));
+        }}
+        name=""
+        id=""
+      >
+        {new Array(data?.totalPages).fill(0).map((el, index) => (
+          <option key={index} value={index}>
+            {index + 1}
+          </option>
+        ))}
+      </select>
+      <button
+        onClick={() => dispatch(nextPage())}
+        // Disable the Next Page button until we know a next page is available
+        disabled={data?.last}
+      >
+        Next Page
+      </button>
     </div>
   );
 };

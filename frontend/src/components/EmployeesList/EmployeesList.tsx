@@ -11,6 +11,7 @@ const EmployeesList = ({ employeesList }: { employeesList: Employee[] }) => {
   const queryClient = useQueryClient();
   const roleAdmin = isAdmin();
 
+  console.log(employeesList);
   const mutation = useMutation({
     mutationFn: deleteEmployee,
     onSuccess: () => queryClient.invalidateQueries({ queryKey: "employees" }),

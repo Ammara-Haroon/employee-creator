@@ -8,6 +8,10 @@ import javax.swing.text.html.Option;
 import org.apache.coyote.BadRequestException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException.BadRequest;
 
@@ -23,8 +27,13 @@ public class EmployeeService {
   @Autowired
   ModelMapper mapper;
 
-  public List<Employee> findAll() {
-    return this.repo.findAll();
+  public Page<Employee> findAll(int page) {
+    Sort sort = Sort.by("firstName").ascending()
+  .and(Sort.by("middleName").ascending())
+  .and(Sort.by("lastName").ascending())
+  ;
+    Pageable pageable = PageRequest.of(page,2).withSort(sort);
+    return this.repo.findAll(pageable);
   }
 
   public Optional<Employee> findById(Long id) {

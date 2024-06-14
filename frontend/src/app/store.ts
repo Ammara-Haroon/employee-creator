@@ -1,11 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import notificationReducer from "../features/Notifcations/NotificationSlice";
 import authReducer from "../features/Auth/AuthSlice";
+import queryParamsReducer from "../features/QueryParams/QueryParamsSlice";
 
 export const store = configureStore({
   reducer: {
     notificaton: notificationReducer,
     auth: authReducer,
+    queryParams: queryParamsReducer,
   },
 });
 
