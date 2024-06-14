@@ -8,21 +8,31 @@ import { useNavigate } from "react-router-dom";
 import EmployeesList from "../../components/EmployeesList/EmployeesList";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAdd } from "@fortawesome/free-solid-svg-icons";
+import { useDispatch, useSelector } from "react-redux";
+import { show } from "../../features/Notifcations/NotificationSlice";
+
+import { RootState } from "../../app/store";
 
 const HomePage = () => {
+  const { authenticated } = useSelector((state: RootState) => state.auth);
+  console.log("Home Page", authenticated);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  if (!authenticated) {
+    console.log("return null");
+    dispatch(show("Unauthorised Access"));
+    return <ErrMsg />;
+  }
+
   // Queries
-  const { isLoading, isError, data, error } = useQuery({
+  const { isLoading, isError, data } = useQuery({
     queryKey: ["employees"],
     queryFn: getAllEmployees,
+    onError: (err: any) => dispatch(show(err.message)),
+    retry: false,
   });
-
   const handleClick = (): void => {
     navigate("/add");
-  };
-
-  const handleClose = (): void => {
-    navigate("/");
   };
 
   return (
@@ -41,9 +51,7 @@ const HomePage = () => {
         </button>
       </div>
       {isLoading && <LoadingSpinner />}
-      {!isLoading && isError && (
-        <ErrMsg msg={error.message} onClose={handleClose} />
-      )}
+      <ErrMsg />
       {!isLoading && !isError && data && <EmployeesList employeesList={data} />}
     </div>
   );

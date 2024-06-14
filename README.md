@@ -67,6 +67,13 @@ Backend should have at least three end points:
 - Added swagger to auto-document API
 - Added test cases at backend to test Employee Controller
 
+### 07/06/2024 - Built a basic employee form using react-hook-form
+
+### 12/06/2024
+
+- Added styling to frontend components
+- Fixed DTO validations issues for finish date
+
 ## What did you struggle with?
 
 ---

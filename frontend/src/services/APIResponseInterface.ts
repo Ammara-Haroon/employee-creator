@@ -1,3 +1,5 @@
+import { boolean } from "zod";
+
 export interface Employee {
   id: number;
   firstName: string;
@@ -21,4 +23,10 @@ export enum EmploymentType {
 export enum ContractType {
   PERMANENT = "PERMANENT",
   CONTRACT = "CONTRACT",
+}
+
+export interface AuthState {
+  authenticated: boolean;
+  authorities: string[];
+  name: string | null;
 }
