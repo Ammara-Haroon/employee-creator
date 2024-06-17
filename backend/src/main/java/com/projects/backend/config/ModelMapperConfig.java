@@ -16,6 +16,7 @@ import org.springframework.context.annotation.Configuration;
 
 import com.projects.backend.employee.ContractType;
 import com.projects.backend.employee.CreateEmployeeDTO;
+import com.projects.backend.employee.DepartmentType;
 import com.projects.backend.employee.Employee;
 import com.projects.backend.employee.EmploymentType;
 import com.projects.backend.employee.UpdateEmployeeDTO;
@@ -42,7 +43,8 @@ public class ModelMapperConfig {
         .addMappings(m -> m.using(new AddressConverter()).map(CreateEmployeeDTO::getAddress, Employee::setAddress))
         .addMappings(m -> m.using(new EmployeeTypeConverter()).map(CreateEmployeeDTO::getEmploymentType, Employee::setEmploymentType))
         .addMappings(m -> m.using(new ContractTypeConverter()).map(CreateEmployeeDTO::getContractType, Employee::setContractType))
-         ;
+        .addMappings(m -> m.using(new DepartmentTypeConverter()).map(CreateEmployeeDTO::getDepartment, Employee::setDepartment))
+       ;
         
     mapper.typeMap(UpdateEmployeeDTO.class, Employee.class)
         .addMappings(m -> m.using(new NameConverter()).map(UpdateEmployeeDTO::getFirstName,
@@ -58,8 +60,8 @@ public class ModelMapperConfig {
         .addMappings(m -> m.using(new EmployeeTypeConverter()).map(UpdateEmployeeDTO::getEmploymentType, Employee::setEmploymentType))
         .addMappings(m -> m.using(new ContractTypeConverter()).map(UpdateEmployeeDTO::getContractType, Employee::setContractType))
         .addMappings(m -> m.using(new IntTypeConverter()).map(UpdateEmployeeDTO::getHoursPerWeek, Employee::setHoursPerWeek))
-         ;
-    
+        .addMappings(m -> m.using(new DepartmentTypeConverter()).map(UpdateEmployeeDTO::getDepartment, Employee::setDepartment))
+        ;
     return mapper;
   }
 
@@ -114,6 +116,18 @@ public class ModelMapperConfig {
         return null;
       }
       return EmploymentType.valueOf(context.getSource().trim().toUpperCase());
+    }
+
+  }
+
+  private class DepartmentTypeConverter implements Converter<String, DepartmentType> {
+
+    @Override
+    public DepartmentType convert(MappingContext<String, DepartmentType> context) {
+      if (context.getSource() == null) {
+        return null;
+      }
+      return DepartmentType.valueOf(context.getSource().trim().toUpperCase());
     }
 
   }

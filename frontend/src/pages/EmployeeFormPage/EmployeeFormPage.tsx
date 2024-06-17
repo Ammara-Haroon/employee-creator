@@ -43,11 +43,13 @@ const EmployeeFormPage = () => {
       queryClient.invalidateQueries({ queryKey: ["employees"] });
     },
     onError: (error: any) => {
-      dispatch(show(error.message));
+      console.log(error.message);
+      dispatch(show("Something went wrong. Unable to save information."));
     },
   });
 
   const saveEmployee = (emp: Employee): void => {
+    console.log("saving ", emp);
     mutation.mutate(emp);
 
     navigate("/dashboard");

@@ -43,7 +43,7 @@ const EmployeeCard = ({
 
   const hasAlreadyLeft =
     employee.finishDate && employee.finishDate < new Date();
-  console.log(hasAlreadyLeft, employee.finishDate);
+  //console.log(hasAlreadyLeft, employee.finishDate);
   return (
     <>
       <tr
@@ -65,10 +65,10 @@ const EmployeeCard = ({
           {employee.firstName} {employee.middleName} {employee.lastName}
         </td>
         <td className="text-center text-ellipsis overflow-hidden text-nowrap  hidden sm:table-cell">
-          {toTitleCase(employee.contractType)}
+          {employee.role}
         </td>
         <td className=" hidden sm:table-cell text-center">
-          {toTitleCase(employee.employmentType)}
+          {toTitleCase(employee.department)}
         </td>
 
         {roleAdmin && (
@@ -88,8 +88,11 @@ const EmployeeCard = ({
       </tr>
       {!hideDetails && (
         <tr className=" text-slate-800 indent-10 text-sm">
-          <div>
+          <td>
             <p className="font-semibold text-ellipsis overflow-hidden text-nowrap">
+              {employee.role + " " + toTitleCase(employee.department)}
+            </p>
+            <p className="text-xs font-semibold text-ellipsis overflow-hidden text-nowrap">
               {toTitleCase(employee.employmentType) +
                 " " +
                 toTitleCase(employee.contractType)}
@@ -134,7 +137,7 @@ const EmployeeCard = ({
                 Finish: {dayjs(employee.finishDate).format("DD/MM/YYYY")}
               </p>
             )}
-          </div>
+          </td>
         </tr>
       )}
     </>

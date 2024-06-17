@@ -57,6 +57,29 @@ public class Employee {
   @Column(nullable = false)
   private int hoursPerWeek;
 
+  public DepartmentType getDepartment() {
+    return department;
+  }
+
+  public void setDepartment(DepartmentType department) {
+    this.department = department;
+  }
+
+  public String getRole() {
+    return role;
+  }
+
+  public void setRole(String role) {
+    this.role = role;
+  }
+
+  @Column(nullable = false)
+  @Enumerated(EnumType.STRING)
+  private DepartmentType department;
+
+  @Column(nullable = false)
+  private String role;
+
   public Long getId() {
     return id;
   }

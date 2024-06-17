@@ -13,18 +13,46 @@ export interface Employee {
   finishDate: Date | null;
   employmentType: EmploymentType;
   hoursPerWeek: number;
+  role: string;
+  department: DepartmentType;
 }
+
+// export interface QueryParams {
+//   admin: string;
+//   contract: string;
+//   finance: string;
+//   fullTime: string;
+//   it: string;
+//   partTime: string;
+//   permanent: string;
+//   search: string;
+//   currentPage: number;
+//   sortType: SortType;
+// }
+//name
+//contractType
+//employementType
+//finished
 
 export enum EmploymentType {
   PART_TIME = "PART_TIME",
   FULL_TIME = "FULL_TIME",
 }
 
+export enum SortType {
+  ASC = "ASC",
+  DESC = "DESC",
+}
 export enum ContractType {
   PERMANENT = "PERMANENT",
   CONTRACT = "CONTRACT",
 }
 
+export enum DepartmentType {
+  ADMIN = "ADMIN",
+  FINANCE = "FINANCE",
+  IT = "IT",
+}
 export interface AuthState {
   authenticated: boolean;
   authorities: string[];

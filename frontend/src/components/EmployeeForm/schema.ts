@@ -1,6 +1,7 @@
 import * as z from "zod";
 import {
   ContractType,
+  DepartmentType,
   EmploymentType,
 } from "../../services/APIResponseInterface";
 
@@ -54,6 +55,8 @@ const schema = z.object({
     }),
   employmentType: z.string(),
   contractType: z.string(),
+  department: z.string(),
+  role: z.string(),
 });
 
 export default schema;

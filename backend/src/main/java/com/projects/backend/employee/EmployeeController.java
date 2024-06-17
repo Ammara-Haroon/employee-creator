@@ -34,9 +34,11 @@ public class EmployeeController {
   EmployeeService employeeService;
 
   @GetMapping()
-  public ResponseEntity<Page<Employee>> findAllEmployees(@RequestParam int page) {
-    System.out.println(page);
-    Page<Employee> allEmployees = this.employeeService.findAll(page);
+  public ResponseEntity<Page<Employee>> findAllEmployees(@RequestParam String name,@RequestParam String department,@RequestParam String employmentType,@RequestParam String contractType,@RequestParam int page, @RequestParam(required=true,name="sort") String sort) {
+    System.out.printf("name:%s\ndepartment:%s\nemplpoyment:%s\ncontract:%s\npage:%d\nsort:%s\n" + //
+            "",name,department,contractType,employmentType,page,sort);
+    Page<Employee> allEmployees = this.employeeService.findAll(name,department,employmentType,contractType,page,sort);
+    //List<Employee> allEmployees = this.employeeService.findAll(page);
     return new ResponseEntity<>(allEmployees, HttpStatus.OK);
   }
 

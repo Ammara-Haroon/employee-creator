@@ -11,11 +11,13 @@ import { enAU } from "date-fns/locale/en-AU";
 
 import {
   ContractType,
+  DepartmentType,
   Employee,
   EmploymentType,
 } from "../../services/APIResponseInterface";
 import { useQueryClient } from "@tanstack/react-query";
 import { Mode } from "../../pages/EmployeeFormPage/Mode";
+import { toTitleCase } from "../../services/utility";
 
 registerLocale("en-AU", enAU);
 interface IEmployeeFormProps {
@@ -44,6 +46,9 @@ const EmployeeForm = ({ mode, employee, saveEmployee }: IEmployeeFormProps) => {
       email: mode === Mode.EDIT ? employee?.email : "",
       hoursPerWeek: mode === Mode.EDIT ? employee?.hoursPerWeek : undefined,
       mobileNumber: mode === Mode.EDIT ? employee?.mobileNumber : "",
+      role: mode === Mode.EDIT ? employee?.role : "",
+      department:
+        mode === Mode.EDIT ? employee?.department : DepartmentType.ADMIN,
     },
   });
   const [startDate, setStartDate] = useState<Date>(
@@ -200,6 +205,36 @@ const EmployeeForm = ({ mode, employee, saveEmployee }: IEmployeeFormProps) => {
           )}
         </div>
         <h2 className={sectionHeadingStyleClass}>Employment Status</h2>
+        <div className={inputWrapperStyleClass}>
+          <label htmlFor="department">Department</label>
+          <select
+            // defaultValue={employee?.department}
+            className={inputStyleClass}
+            id="department"
+            {...register("department")}
+          >
+            <option value={DepartmentType.ADMIN}>
+              {toTitleCase(DepartmentType.ADMIN)}
+            </option>
+            <option value={DepartmentType.FINANCE}>
+              {toTitleCase(DepartmentType.FINANCE)}
+            </option>
+            <option value={DepartmentType.IT}>
+              {DepartmentType.IT.toUpperCase()}
+            </option>
+          </select>
+        </div>
+        <div className={inputWrapperStyleClass}>
+          <label htmlFor="role">Role</label>
+          <input
+            className={inputStyleClass}
+            id="role"
+            type="text"
+            placeholder="@role"
+            {...register("role")}
+            required
+          />
+        </div>
         <div className={radioGroupStyleClass}>
           <label>What is contract type?</label>
           <div>
@@ -274,7 +309,7 @@ const EmployeeForm = ({ mode, employee, saveEmployee }: IEmployeeFormProps) => {
         <div className={inputWrapperStyleClass}>
           <label htmlFor="hoursPerWeek">Hours per week</label>
           <input
-            className="p-2 border border-cyan-900 focus:outline-none focus:border-teal-400 focus:ring-2 w-10"
+            className="p-2 border border-cyan-900 focus:outline-none focus:border-teal-400 focus:ring-2 w-16"
             type="number"
             placeholder="1-40"
             id="hoursPerWeek"

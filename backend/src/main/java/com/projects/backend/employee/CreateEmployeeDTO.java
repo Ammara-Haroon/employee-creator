@@ -46,6 +46,25 @@ public class CreateEmployeeDTO {
   @EmploymentTypeConstraint
   private String employmentType;
 
+  public String getDepartment() {
+    return department;
+  }
+
+  public String getRole() {
+    return role;
+  }
+
+
+
+  @NotBlank
+  @DepartmentTypeConstraint
+  private String department;
+  
+  @NotBlank
+  @Pattern(regexp = ".*\\S.*", message = "role should contain at least 1 non-white-space characters")
+  private String role;
+
+
   @NotBlank
   @Pattern(regexp="\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1]).*",message="date format should be yyyy-mm-dd")
   private String startDate;

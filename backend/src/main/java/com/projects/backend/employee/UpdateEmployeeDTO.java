@@ -4,6 +4,7 @@ import org.hibernate.validator.constraints.Length;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Positive;
 
@@ -31,8 +32,25 @@ public class UpdateEmployeeDTO {
   @ContractTypeConstraint
   private String contractType;
   
+  public String getDepartment() {
+    return department;
+  }
+
+  public String getRole() {
+    return role;
+  }
+
+
+
   @EmploymentTypeConstraint
   private String employmentType;
+
+  @DepartmentTypeConstraint
+  private String department;
+  
+  @Pattern(regexp = ".*\\S.*", message = "role should contain at least 1 non-white-space characters")
+  private String role;
+
 
   @Pattern(regexp="^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1]).*$",message="date format should be yyyy-mm-dd")
   private String startDate;

@@ -1,5 +1,8 @@
 package com.projects.backend.employee;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException.BadRequest;
 
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import jakarta.validation.ValidationException;
 
 @Service
@@ -27,13 +31,37 @@ public class EmployeeService {
   @Autowired
   ModelMapper mapper;
 
-  public Page<Employee> findAll(int page) {
-    Sort sort = Sort.by("firstName").ascending()
-  .and(Sort.by("middleName").ascending())
-  .and(Sort.by("lastName").ascending())
+   public List<Employee> findAll() {
+   return this.repo.findAll();
+  }
+
+  public Page<Employee> findAll(String name,String department,String employmentType,String contractType,int page, String sortType) {
+    int NUMBER_OF_EMPLOPYEES_PER_PAGE = 20;
+
+    Sort sort;
+    System.out.println(sortType.equals(SortType.DESC.label));
+    if(sortType.equals(SortType.DESC.label)){
+      sort = Sort.by("firstName").descending()
+  .and(Sort.by("middleName").descending())
+  .and(Sort.by("lastName").descending())
   ;
-    Pageable pageable = PageRequest.of(page,2).withSort(sort);
-    return this.repo.findAll(pageable);
+    } else {
+      sort = Sort.by("firstName").ascending()
+    .and(Sort.by("middleName").ascending())
+    .and(Sort.by("lastName").ascending())
+  ;
+    }
+    Pageable pageable = PageRequest.of(page,NUMBER_OF_EMPLOPYEES_PER_PAGE).withSort(sort);
+    
+    Collection<String> et = Arrays.asList(employmentType.split(","));
+    Collection<String> ct =  Arrays.asList(contractType.split(","));
+    Collection<String> dept =  Arrays.asList(department.split(","));
+
+    System.out.println(et);
+    return this.repo.findByQueryParams(et,ct,dept,name, pageable);
+  //  System.out.println(emps.getSize());
+  //  return this.repo.findAll(pageable);
+
   }
 
   public Optional<Employee> findById(Long id) {
