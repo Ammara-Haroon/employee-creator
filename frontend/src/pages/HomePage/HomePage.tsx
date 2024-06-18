@@ -94,6 +94,11 @@ const HomePage = () => {
     event.preventDefault();
     console.log(formRef.current);
     formRef.current?.reset();
+    dispatch(
+      updateFilterParams(
+        Object.fromEntries(new FormData(formRef.current || undefined).entries())
+      )
+    );
   };
 
   return (
@@ -243,15 +248,16 @@ const HomePage = () => {
       {data?.totalPages !== undefined && data?.totalPages > 1 && (
         <div className="flex justify-center hover:text-">
           <button
-            className="text-cyan-900 hover:text-teal-500"
+            className="text-cyan-900 hover:text-teal-500  disabled:text-slate-700"
             onClick={() => dispatch(previousPage())}
             disabled={data?.first}
           >
             <FontAwesomeIcon icon={faArrowLeft} />
           </button>
           <select
-            className="text-cyan-900 font-semibold"
-            defaultValue={queryParams.currentPage}
+            className="text-cyan-900 font-semibold "
+            defaultValue={1}
+            value={queryParams.currentPage}
             onChange={(e) => {
               console.log("selected page ", e.currentTarget.value);
               dispatch(setPage(parseInt(e.currentTarget.value)));
@@ -266,7 +272,7 @@ const HomePage = () => {
             ))}
           </select>
           <button
-            className="text-cyan-900  hover:text-teal-500"
+            className="text-cyan-900  hover:text-teal-500 disabled:text-slate-700"
             onClick={() => dispatch(nextPage())}
             // Disable the Next Page button until we know a next page is available
             disabled={data?.last}

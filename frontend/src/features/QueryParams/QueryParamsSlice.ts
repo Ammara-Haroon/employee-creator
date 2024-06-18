@@ -37,11 +37,10 @@ export const queryParamsSlice = createSlice({
       console.log(state, payload);
     },
     nextPage: (state) => {
-      state.currentPage =
-        (state.currentPage + 1) % (state.totalNumberOfPages + 1);
+      state.currentPage = (state.currentPage + 1) % state.totalNumberOfPages;
     },
     previousPage: (state) => {
-      state.currentPage = Math.max(1, state.currentPage - 1);
+      state.currentPage = Math.max(0, state.currentPage - 1);
     },
     updateTotalNumberOfPages: (state, payload) => {
       state.totalNumberOfPages = payload.payload;
@@ -55,11 +54,12 @@ export const queryParamsSlice = createSlice({
       state.partTime = payload.payload.partTime;
       state.permanent = payload.payload.permanent;
       state.search = payload.payload.search;
-      state.sort = payload.payload.sort;
+      state.currentPage = 0;
     },
     toggleSort: (state) => {
       if (state.sort === SortType.DESC) state.sort = SortType.ASC;
       else state.sort = SortType.DESC;
+      state.currentPage = 0;
     },
   },
 });

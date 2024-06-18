@@ -1,11 +1,13 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { FormEvent, useRef, useState } from "react";
-import { SignInInfo, signIn } from "../../services/SignInServices";
+import { FormEvent, useEffect, useRef, useState } from "react";
+import { SignInInfo, getCSRF, signIn } from "../../services/SignInServices";
 import { hide, show } from "../../features/Notifcations/NotificationSlice";
 import ErrMsg from "../../components/ErrMsg/ErrMsg";
 import { useDispatch, useSelector } from "react-redux";
 import { logout, updateAuthState } from "../../features/Auth/AuthSlice";
 import { useNavigate } from "react-router-dom";
+import { setToken } from "../../features/AuthToken/AuthTokenSlice";
+import { RootState } from "../../app/store";
 
 const LoginPage = () => {
   const formRef = useRef<HTMLFormElement>(null);
@@ -18,14 +20,17 @@ const LoginPage = () => {
   const inputWrapperStyleClass = "px-3 flex flex-col";
   const sectionHeadingStyleClass =
     "text-xl font-bold text-cyan-900 uppercase pt-7 pb-4";
+  const { token } = useSelector((state: RootState) => state.authToken);
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(formRef.current);
+    //getCSRF().then((token) => {
+    //dispatch(setToken(token));
     if (formRef.current)
       console.log(Object.fromEntries(new FormData(formRef.current).entries()));
     signIn(
-      Object.fromEntries(new FormData(formRef.current).entries()) as SignInInfo
+      Object.fromEntries(new FormData(formRef.current).entries()) as SignInInfo,
+      null //token
     )
       .then((data) => {
         console.log("login response", data);
@@ -45,8 +50,9 @@ const LoginPage = () => {
       })
       .catch((e: any) => {
         dispatch(logout());
-        dispatch(show("Login Failed. Bad Username or Password"));
+        dispatch(show(e.message)); //"Login Failed. Bad Username or Password"));
       });
+    //});
   };
 
   return (
@@ -89,12 +95,11 @@ const LoginPage = () => {
             Sign In
           </button>
         </div>
+
+        <input id="_csrf" name="_csrf" type="hidden" value={token}></input>
       </form>
     </div>
   );
 };
 
 export default LoginPage;
-function dispatch(arg0: any) {
-  throw new Error("Function not implemented.");
-}

@@ -32,13 +32,13 @@ const EmployeesList = ({ employeesList }: { employeesList: Employee[] }) => {
       <table className="table-fixed border w-full  border-black">
         <thead className="bg-teal-500  text-slate-900">
           <tr>
-            <th className="uppercase p-2">
-              Employee Name
+            <th className="flex items-center uppercase p-2">
+              <span className="px-1">Employee Name</span>
               <button
                 onClick={() => dispatch(toggleSort())}
-                className="rotate-90 border border-cyan-900 p-1 bg-cyan-900 rounded-lg hover:text-teal-100"
+                className="text-xs text-wrap leading-none w-5 border border-cyan-900 py-1 px-0.5 bg-cyan-900 rounded-lg hover:text-teal-100"
               >
-                {sort === SortType.ASC ? "A - Z" : "Z - A"}
+                {sort === SortType.ASC ? "A ▼ Z" : "Z ▼ A"}
               </button>
             </th>
             <th className="uppercase hidden sm:table-cell">Role</th>
