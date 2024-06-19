@@ -1,13 +1,6 @@
-import React, {
-  FormEvent,
-  MouseEvent,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
-import { Employee } from "../../services/APIResponseInterface";
+import { FormEvent, MouseEvent, useRef } from "react";
 import { getAllEmployees } from "../../services/EmployeeServices";
-import { useQuery, useQueryClient } from "react-query";
+import { useQuery } from "react-query";
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 import ErrMsg from "../../components/ErrMsg/ErrMsg";
 import { useNavigate } from "react-router-dom";
@@ -45,19 +38,14 @@ const HomePage = () => {
 
   const { authenticated } = useSelector((state: RootState) => state.auth);
   const roleAdmin = isAdmin();
-  console.log("Home Page", authenticated);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   if (!authenticated) {
-    console.log("return null");
     dispatch(show("Unauthorised Access"));
     return <ErrMsg />;
   }
 
   const queryParams = useSelector((state: RootState) => state.queryParams);
-
-  console.log("currentPage", queryParams);
-  // Queries
 
   const { isLoading, isError, data } = useQuery({
     queryKey: ["employees", queryParams],
@@ -66,7 +54,6 @@ const HomePage = () => {
     retry: false,
     keepPreviousData: true,
   });
-  console.log("data in homepage", data);
   dispatch(updateTotalNumberOfPages(data?.totalPages));
 
   const handleClick = (): void => {
@@ -75,24 +62,17 @@ const HomePage = () => {
 
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
-    console.log(
-      "current filters",
-      Object.fromEntries(new FormData(formRef.current || undefined).entries())
-    );
     if (formRef?.current)
-      console.log(
-        "current filters",
-        Object.fromEntries(new FormData(formRef.current).entries())
+      dispatch(
+        updateFilterParams(
+          Object.fromEntries(
+            new FormData(formRef.current || undefined).entries()
+          )
+        )
       );
-    dispatch(
-      updateFilterParams(
-        Object.fromEntries(new FormData(formRef.current || undefined).entries())
-      )
-    );
   };
   const resetForm = (event: MouseEvent) => {
     event.preventDefault();
-    console.log(formRef.current);
     formRef.current?.reset();
     dispatch(
       updateFilterParams(
@@ -114,7 +94,7 @@ const HomePage = () => {
             title="Add New Employee"
           >
             <FontAwesomeIcon className="px-1" icon={faAdd} />
-            Add New Empoyee
+            Add New Employee
           </button>
         )}
       </div>
@@ -256,10 +236,8 @@ const HomePage = () => {
           </button>
           <select
             className="text-cyan-900 font-semibold "
-            defaultValue={1}
             value={queryParams.currentPage}
             onChange={(e) => {
-              console.log("selected page ", e.currentTarget.value);
               dispatch(setPage(parseInt(e.currentTarget.value)));
             }}
             name=""

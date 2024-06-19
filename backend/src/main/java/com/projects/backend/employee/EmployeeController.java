@@ -38,7 +38,6 @@ public class EmployeeController {
     System.out.printf("name:%s\ndepartment:%s\nemplpoyment:%s\ncontract:%s\npage:%d\nsort:%s\n" + //
             "",name,department,contractType,employmentType,page,sort);
     Page<Employee> allEmployees = this.employeeService.findAll(name,department,employmentType,contractType,page,sort);
-    //List<Employee> allEmployees = this.employeeService.findAll(page);
     return new ResponseEntity<>(allEmployees, HttpStatus.OK);
   }
 

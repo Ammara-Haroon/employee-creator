@@ -18,6 +18,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException.BadRequest;
 
+import com.projects.backend.factory.EmployeeCreator;
+
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.validation.ValidationException;
@@ -57,11 +59,8 @@ public class EmployeeService {
     Collection<String> ct =  Arrays.asList(contractType.split(","));
     Collection<String> dept =  Arrays.asList(department.split(","));
 
-    System.out.println(et);
     return this.repo.findByQueryParams(et,ct,dept,name, pageable);
-  //  System.out.println(emps.getSize());
-  //  return this.repo.findAll(pageable);
-
+  
   }
 
   public Optional<Employee> findById(Long id) {
@@ -97,5 +96,8 @@ public class EmployeeService {
     return maybeEmployee;
   }
   
+  public void setUpEmployeeDatabase(){
+      new EmployeeCreator(this.repo);
+  }
   
 }

@@ -16,7 +16,6 @@ const EmployeesList = ({ employeesList }: { employeesList: Employee[] }) => {
   const dispatch = useDispatch();
   const { sort } = useSelector((state: RootState) => state.queryParams);
 
-  console.log(employeesList);
   const mutation = useMutation({
     mutationFn: deleteEmployee,
     onSuccess: () => queryClient.invalidateQueries({ queryKey: "employees" }),

@@ -43,7 +43,6 @@ const EmployeeCard = ({
 
   const hasAlreadyLeft =
     employee.finishDate && employee.finishDate < new Date();
-  //console.log(hasAlreadyLeft, employee.finishDate);
   return (
     <>
       <tr
@@ -73,10 +72,15 @@ const EmployeeCard = ({
 
         {roleAdmin && (
           <td className="text-right text-ellipsis overflow-hidden text-nowrap ">
-            <button className="p-2" onClick={() => handleEdit(employee)}>
+            <button
+              data-testid="editBtn"
+              className="p-2"
+              onClick={() => handleEdit(employee)}
+            >
               <FontAwesomeIcon icon={faPencil} />
             </button>
             <button
+              data-testid="deleteBtn"
               className="px-3 py-2"
               onClick={() => handleDelete(employee.id)}
             >

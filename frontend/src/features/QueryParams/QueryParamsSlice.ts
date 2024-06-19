@@ -34,7 +34,6 @@ export const queryParamsSlice = createSlice({
   reducers: {
     setPage: (state, payload) => {
       state.currentPage = payload.payload;
-      console.log(state, payload);
     },
     nextPage: (state) => {
       state.currentPage = (state.currentPage + 1) % state.totalNumberOfPages;
@@ -56,6 +55,19 @@ export const queryParamsSlice = createSlice({
       state.search = payload.payload.search;
       state.currentPage = 0;
     },
+    resetFilterParams: (state) => {
+      state.admin = initialState.admin;
+      state.contract = initialState.contract;
+      state.finance = initialState.finance;
+      state.fullTime = initialState.fullTime;
+      state.it = initialState.it;
+      state.partTime = initialState.partTime;
+      state.permanent = initialState.permanent;
+      state.search = initialState.search;
+      state.currentPage = initialState.currentPage;
+      state.totalNumberOfPages = initialState.totalNumberOfPages;
+      state.sort = initialState.sort;
+    },
     toggleSort: (state) => {
       if (state.sort === SortType.DESC) state.sort = SortType.ASC;
       else state.sort = SortType.DESC;
@@ -72,6 +84,7 @@ export const {
   updateTotalNumberOfPages,
   updateFilterParams,
   toggleSort,
+  resetFilterParams,
 } = queryParamsSlice.actions;
 
 export default queryParamsSlice.reducer;

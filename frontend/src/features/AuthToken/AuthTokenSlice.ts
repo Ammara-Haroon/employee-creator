@@ -21,10 +21,15 @@ export const authTokenSlice = createSlice({
       state.parameterName = payload.payload.parameterName;
       state.headerName = payload.payload.headerName;
     },
+    resetToken: (state) => {
+      state.token = initialState.token;
+      state.parameterName = initialState.parameterName;
+      state.headerName = initialState.headerName;
+    },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { setToken } = authTokenSlice.actions;
+export const { setToken, resetToken } = authTokenSlice.actions;
 
 export default authTokenSlice.reducer;

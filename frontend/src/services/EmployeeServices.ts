@@ -1,7 +1,8 @@
+import axios from "axios";
 import { QueryParamsState } from "../features/QueryParams/QueryParamsSlice";
 import { Employee, EmployeePageResponse } from "./APIResponseInterface";
 
-const SERVER_URL = import.meta.env.VITE_APP_SERVER_URL;
+import { SERVER_URL } from "./api-config";
 
 // export const getAllEmployees = async (
 //   currentPage: number = 0
@@ -21,7 +22,6 @@ const SERVER_URL = import.meta.env.VITE_APP_SERVER_URL;
 export const getQueryParamsString = (
   queryParams: Partial<QueryParamsState>
 ): string => {
-  console.log(queryParams);
   if (
     (!queryParams.admin && !queryParams.finance && !queryParams.it) ||
     (!queryParams.fullTime && !queryParams.partTime) ||
@@ -60,38 +60,16 @@ export const getQueryParamsString = (
   queryStr = queryStr.substring(0, queryStr.length - 1);
   return queryStr;
 };
-// export const getAllEmployees = async (
-//   filterParams: FilterParams,
-//   currentPage: number = 0
-// ): Promise<EmployeePageResponse> => {
-//   console.log(filterParams, currentPage);
-//   const filterParamsString = getFilterParamsString(filterParams);
-//   if (filterParamsString.length === 0)
-//     throw new Error("Nothing found with these filters");
-//   const response = await fetch(
-//     `${SERVER_URL}/employees?page=${currentPage}&${filterParamsString}`
-//   );
-//   const data = await response.json();
-//   console.log(data);
-//   data.content = data.content.map((entry: any) => ({
-//     ...entry,
-//     startDate: new Date(entry.startDate),
-//     finishDate: entry.finishDate && new Date(entry.finishDate),
-//   }));
-//   return data;
-// };
-
 export const getAllEmployees = async (
   queryParams: Partial<QueryParamsState>
 ): Promise<EmployeePageResponse> => {
-  console.log("queryParams:", queryParams);
   const queryParamsString = getQueryParamsString(queryParams);
-  console.log("queryParams string:", queryParamsString);
   if (queryParamsString.length === 0)
     throw new Error("Nothing found with these filters");
-  const response = await fetch(`${SERVER_URL}/employees?${queryParamsString}`);
-  const data = await response.json();
-  console.log(data);
+  const response = await axios.get(
+    `${SERVER_URL}/employees?${queryParamsString}`
+  );
+  const data = response.data;
   data.content = data.content.map((entry: any) => ({
     ...entry,
     startDate: new Date(entry.startDate),
@@ -101,32 +79,19 @@ export const getAllEmployees = async (
 };
 
 export const createEmployee = async (data: Employee): Promise<Employee> => {
-  const response = await fetch(SERVER_URL + "/employees", {
-    method: "POST",
-    body: JSON.stringify(data),
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-  return await response.json();
+  const response = await axios.post(SERVER_URL + "/employees", data);
+  return response.data;
 };
 
 export const deleteEmployee = async (id: number): Promise<void> => {
-  await fetch(`${SERVER_URL}/employees/${id}`, {
-    method: "DELETE",
-  });
+  await axios.delete(`${SERVER_URL}/employees/${id}`);
 };
 
 export const updateEmployee = async (data: Employee): Promise<Employee> => {
-  console.log("data chabge0", data);
-
-  const response = await fetch(`${SERVER_URL}/employees/${data.id}`, {
-    method: "PATCH",
-    body: JSON.stringify(data),
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-  if (!response.ok) console.log(response.text);
-  return await response.json();
+  const response = await axios.patch(
+    `${SERVER_URL}/employees/${data.id}`,
+    data
+  );
+  if (response.status !== 200) console.log(response.statusText);
+  return response.data;
 };

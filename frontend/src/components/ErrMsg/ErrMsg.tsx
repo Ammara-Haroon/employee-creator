@@ -13,7 +13,10 @@ const ErrMsg = () => {
   const dispatch = useDispatch();
   return (
     display && (
-      <div className="block fixed h-fit bg-sky-100 rounded-lg w-fit px-10 py-10  right-12 bottom-10 border">
+      <div
+        data-testid="error"
+        className="block fixed h-fit bg-sky-100 rounded-lg w-fit px-10 py-10  right-12 bottom-10 border"
+      >
         <FontAwesomeIcon
           className="hover:text-cyan-900 p-2 absolute top-0 right-0 text-teal-500 text-right"
           icon={faXmark}

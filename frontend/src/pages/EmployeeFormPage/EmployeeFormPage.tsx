@@ -23,17 +23,13 @@ const EmployeeFormPage = () => {
   const navigate = useNavigate();
   const mode = location.pathname === "/edit" ? Mode.EDIT : Mode.ADD;
   const employee = location.state?.employeeData;
-  console.log("state ", employee, mode == Mode.EDIT);
-  console.log("location ", location.pathname);
   const mutationFn = mode == Mode.EDIT ? updateEmployee : createEmployee;
   const dispatch = useDispatch();
 
   const { authenticated } = useSelector((state: RootState) => state.auth);
   const roleAdmin = isAdmin();
 
-  console.log("add Page", authenticated);
   if (!authenticated && !roleAdmin) {
-    console.log("return null");
     dispatch(show("Unauthorised Access"));
     return <ErrMsg />;
   }
@@ -43,15 +39,12 @@ const EmployeeFormPage = () => {
       queryClient.invalidateQueries({ queryKey: ["employees"] });
     },
     onError: (error: any) => {
-      console.log(error.message);
       dispatch(show("Something went wrong. Unable to save information."));
     },
   });
 
   const saveEmployee = (emp: Employee): void => {
-    console.log("saving ", emp);
     mutation.mutate(emp);
-
     navigate("/dashboard");
   };
 

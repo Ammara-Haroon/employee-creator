@@ -6,8 +6,9 @@ import ErrMsg from "../../components/ErrMsg/ErrMsg";
 import { useDispatch, useSelector } from "react-redux";
 import { logout, updateAuthState } from "../../features/Auth/AuthSlice";
 import { useNavigate } from "react-router-dom";
-import { setToken } from "../../features/AuthToken/AuthTokenSlice";
+import { resetToken, setToken } from "../../features/AuthToken/AuthTokenSlice";
 import { RootState } from "../../app/store";
+import { resetFilterParams } from "../../features/QueryParams/QueryParamsSlice";
 
 const LoginPage = () => {
   const formRef = useRef<HTMLFormElement>(null);
@@ -18,41 +19,38 @@ const LoginPage = () => {
   const inputStyleClass = genericInputStyle + " max-w-1/2 w-80";
 
   const inputWrapperStyleClass = "px-3 flex flex-col";
-  const sectionHeadingStyleClass =
-    "text-xl font-bold text-cyan-900 uppercase pt-7 pb-4";
   const { token } = useSelector((state: RootState) => state.authToken);
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    dispatch(logout());
+    dispatch(resetFilterParams());
+    dispatch(resetToken());
+    dispatch(hide());
+
     //getCSRF().then((token) => {
     //dispatch(setToken(token));
     if (formRef.current)
-      console.log(Object.fromEntries(new FormData(formRef.current).entries()));
-    signIn(
-      Object.fromEntries(new FormData(formRef.current).entries()) as SignInInfo,
-      null //token
-    )
-      .then((data) => {
-        console.log("login response", data);
-        dispatch(updateAuthState(data));
-
-        console.log("login");
-        if (data.authenticated) {
-          console.log("login redirec to dashboard", data);
-
-          dispatch(hide());
-
-          navigate("/dashboard");
-        } else {
+      signIn(
+        Object.fromEntries(
+          new FormData(formRef.current).entries()
+        ) as SignInInfo,
+        null //token
+      )
+        .then((data) => {
+          dispatch(updateAuthState(data));
+          if (data.authenticated) {
+            dispatch(hide());
+            navigate("/dashboard");
+          } else {
+            dispatch(logout());
+            dispatch(show("Login Failed. Bad Username or Password"));
+          }
+        })
+        .catch((e: any) => {
           dispatch(logout());
-          dispatch(show("Login Failed. Bad Username or Password"));
-        }
-      })
-      .catch((e: any) => {
-        dispatch(logout());
-        dispatch(show(e.message)); //"Login Failed. Bad Username or Password"));
-      });
-    //});
+          dispatch(show(e.message)); //"Login Failed. Bad Username or Password"));
+        });
   };
 
   return (
@@ -96,7 +94,12 @@ const LoginPage = () => {
           </button>
         </div>
 
-        <input id="_csrf" name="_csrf" type="hidden" value={token}></input>
+        <input
+          id="_csrf"
+          name="_csrf"
+          type="hidden"
+          value={token || ""}
+        ></input>
       </form>
     </div>
   );

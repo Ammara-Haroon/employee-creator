@@ -61,7 +61,6 @@ const EmployeeForm = ({ mode, employee, saveEmployee }: IEmployeeFormProps) => {
     if (startDate) data.startDate = startDate;
     data.finishDate = finishDate;
     if (data.middleName === "") data.middleName = null;
-    console.log(data);
     if (mode === Mode.EDIT && employee?.id) data.id = employee.id;
     saveEmployee(data);
   };
@@ -79,8 +78,6 @@ const EmployeeForm = ({ mode, employee, saveEmployee }: IEmployeeFormProps) => {
     setStartDate(tmpStartDate);
   };
   const validateAndSetFinishDate = (date: Date | null) => {
-    console.log(date, typeof startDate, date && date < startDate);
-
     if (date && date < startDate) {
       setFinishDate(startDate);
       return;
@@ -117,7 +114,7 @@ const EmployeeForm = ({ mode, employee, saveEmployee }: IEmployeeFormProps) => {
             {...register("firstName")}
           />
           {errors.firstName ? (
-            <small className={errorStyleClass}>
+            <small data-testid="error" className={errorStyleClass}>
               {errors.firstName.message}
             </small>
           ) : (
@@ -134,7 +131,7 @@ const EmployeeForm = ({ mode, employee, saveEmployee }: IEmployeeFormProps) => {
             {...register("middleName")}
           />
           {errors.middleName ? (
-            <small className={errorStyleClass}>
+            <small data-testid="error" className={errorStyleClass}>
               {errors.middleName.message}
             </small>
           ) : (
@@ -151,7 +148,9 @@ const EmployeeForm = ({ mode, employee, saveEmployee }: IEmployeeFormProps) => {
             {...register("lastName")}
           />
           {errors.lastName ? (
-            <small className={errorStyleClass}>{errors.lastName.message}</small>
+            <small data-testid="error" className={errorStyleClass}>
+              {errors.lastName.message}
+            </small>
           ) : (
             <small>&#8203;</small>
           )}
@@ -167,7 +166,9 @@ const EmployeeForm = ({ mode, employee, saveEmployee }: IEmployeeFormProps) => {
             {...register("email")}
           />
           {errors.email ? (
-            <small className={errorStyleClass}>{errors.email.message}</small>
+            <small data-testid="error" className={errorStyleClass}>
+              {errors.email.message}
+            </small>
           ) : (
             <small>&#8203;</small>
           )}
@@ -182,7 +183,7 @@ const EmployeeForm = ({ mode, employee, saveEmployee }: IEmployeeFormProps) => {
             {...register("mobileNumber")}
           />
           {errors.mobileNumber ? (
-            <small className={errorStyleClass}>
+            <small data-testid="error" className={errorStyleClass}>
               {errors.mobileNumber.message}
             </small>
           ) : (
@@ -199,7 +200,9 @@ const EmployeeForm = ({ mode, employee, saveEmployee }: IEmployeeFormProps) => {
             {...register("address")}
           />
           {errors.address ? (
-            <small className={errorStyleClass}>{errors.address.message}</small>
+            <small data-testid="error" className={errorStyleClass}>
+              {errors.address.message}
+            </small>
           ) : (
             <small>&#8203;</small>
           )}
@@ -316,7 +319,7 @@ const EmployeeForm = ({ mode, employee, saveEmployee }: IEmployeeFormProps) => {
             {...register("hoursPerWeek")}
           />
           {errors.hoursPerWeek ? (
-            <small className={errorStyleClass}>
+            <small data-testid="error" className={errorStyleClass}>
               {errors.hoursPerWeek.message}
             </small>
           ) : (
