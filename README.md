@@ -1,6 +1,6 @@
 # Employee Creator
 [![Front End Tests](https://github.com/Ammara-Haroon/employee-creator/actions/workflows/main.yml/badge.svg)](https://github.com/Ammara-Haroon/employee-creator/actions/workflows/main.yml)
-[![Backend Tests](https://github.com/Ammara-Haroon/employee-creator/actions/workflows/maven.yml/badge.svg)](https://github.com/Ammara-Haroon/employee-creator/actions/workflows/maven.yml)
+[![Back End Tests](https://github.com/Ammara-Haroon/employee-creator/actions/workflows/maven.yml/badge.svg)](https://github.com/Ammara-Haroon/employee-creator/actions/workflows/maven.yml)
 ## Demo & Snippets
 
 ## Purpose of the Project
