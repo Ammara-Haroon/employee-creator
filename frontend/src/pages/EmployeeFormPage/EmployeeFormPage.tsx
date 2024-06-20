@@ -16,6 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { show } from "../../features/Notifcations/NotificationSlice";
 import { RootState } from "../../app/store";
 import { isAdmin } from "../../features/Auth/AuthSlice";
+import { resetFilterParams } from "../../features/QueryParams/QueryParamsSlice";
 
 const EmployeeFormPage = () => {
   const queryClient = useQueryClient();
@@ -45,6 +46,7 @@ const EmployeeFormPage = () => {
 
   const saveEmployee = (emp: Employee): void => {
     mutation.mutate(emp);
+    dispatch(resetFilterParams());
     navigate("/dashboard");
   };
 

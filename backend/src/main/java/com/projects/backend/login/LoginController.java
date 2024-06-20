@@ -34,7 +34,6 @@ private final AuthenticationManager authenticationManager;
 			Authentication authenticationResponse =
 			this.authenticationManager.authenticate(authenticationRequest);
 			System.out.println(authenticationResponse.toString());
-			//return new ResponseEntity<>(authenticationResponse,HttpStatus.ACCEPTED);
 			AuthenticationResponse res = new AuthenticationResponse(authenticationResponse.isAuthenticated(), authenticationResponse.getAuthorities(), authenticationResponse.getName());
 			System.out.println(res.toString());
 			
