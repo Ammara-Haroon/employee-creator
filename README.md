@@ -2,10 +2,8 @@
 [![Front End Tests](https://github.com/Ammara-Haroon/employee-creator/actions/workflows/main.yml/badge.svg)](https://github.com/Ammara-Haroon/employee-creator/actions/workflows/main.yml)
 [![Back End Tests](https://github.com/Ammara-Haroon/employee-creator/actions/workflows/maven.yml/badge.svg)](https://github.com/Ammara-Haroon/employee-creator/actions/workflows/maven.yml)
 ## Demo & Snippets
-To view the demo through docker, pull the repo and run the following command int the root directory
-
-docker compose up --build
-
+To view the demo through docker, clone the repo and run the following command int the root directory
+```docker compose up --build```
 App will be available at http://localhost:5173 . Backend API is available http://localhost:8080 and Swagger Documentation can be viewed at http://localhost:8080/swagger-ui/index.html. Reset the assigned ports in compose.yaml file if required.
 Login: 
             _User ADMIN_                              _User 2_
