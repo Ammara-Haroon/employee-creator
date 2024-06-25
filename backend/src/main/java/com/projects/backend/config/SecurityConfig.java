@@ -1,4 +1,5 @@
 package com.projects.backend.config;
+
 import java.io.IOException;
 import java.util.function.Supplier;
 
@@ -24,6 +25,7 @@ import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 import org.springframework.security.web.csrf.CsrfTokenRequestHandler;
 import org.springframework.security.web.csrf.XorCsrfTokenRequestAttributeHandler;
+import org.springframework.security.web.server.csrf.CsrfWebFilter;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -38,73 +40,86 @@ public class SecurityConfig {
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-  	 http.formLogin(form -> form.loginPage("http://localhost:5173"))
-                .csrf(csrf->csrf.disable());
-        
+		http.formLogin(form -> form.loginPage("http://localhost:5173"))
+				.csrf(csrf -> csrf.disable());
 
-		 //.csrf(csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-			//.csrfTokenRequestHandler(new SpaCsrfTokenRequestHandler()));
-			
+		// http.csrf(csrf ->
+		// csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+		// .csrfTokenRequestHandler(new SpaCsrfTokenRequestHandler())).formLogin(
+		// form -> form.loginPage("http://localhost:5173"))
+		// .authorizeHttpRequests(req ->
+		// req.requestMatchers("/emoloyees").hasRole("ADMIN"));
+
 		return http.build();
 	}
 
 	final class SpaCsrfTokenRequestHandler extends CsrfTokenRequestAttributeHandler {
-	private final CsrfTokenRequestHandler delegate = new XorCsrfTokenRequestAttributeHandler();
+		private final CsrfTokenRequestHandler delegate = new XorCsrfTokenRequestAttributeHandler();
 
-	@Override
-	public void handle(HttpServletRequest request, HttpServletResponse response, Supplier<CsrfToken> csrfToken) {
-		/*
-		 * Always use XorCsrfTokenRequestAttributeHandler to provide BREACH protection of
-		 * the CsrfToken when it is rendered in the response body.
-		 */
-		System.out.println("request "+request);
-		System.out.println("response "+response);
-		System.out.println("token "+csrfToken.toString());
+		@Override
+		public void handle(HttpServletRequest request, HttpServletResponse response, Supplier<CsrfToken> csrfToken) {
+			/*
+			 * Always use XorCsrfTokenRequestAttributeHandler to provide BREACH protection
+			 * of
+			 * the CsrfToken when it is rendered in the response body.
+			 */
 
-		this.delegate.handle(request, response, csrfToken);
-	}
+			this.delegate.handle(request, response, csrfToken);
+			System.out.println("response " + response.getStatus());
 
-	@Override
-	public String resolveCsrfTokenValue(HttpServletRequest request, CsrfToken csrfToken) {
-		/*
-		 * If the request contains a request header, use CsrfTokenRequestAttributeHandler
-		 * to resolve the CsrfToken. This applies when a single-page application includes
-		 * the header value automatically, which was obtained via a cookie containing the
-		 * raw CsrfToken.
-		 */
-			System.out.println("token resolved?"+request.getHeader(csrfToken.getHeaderName())+csrfToken.getHeaderName());
-			System.out.println(request.getHeader("X-XSRF-TOKEN"));
-
-		if (StringUtils.hasText(request.getHeader(csrfToken.getHeaderName()))) {
-			System.out.println(csrfToken.getToken());
-			System.out.println("super resolve  "+super.resolveCsrfTokenValue(request, csrfToken));
-			return super.resolveCsrfTokenValue(request, csrfToken);
 		}
-		/*
-		 * In all other cases (e.g. if the request contains a request parameter), use
-		 * XorCsrfTokenRequestAttributeHandler to resolve the CsrfToken. This applies
-		 * when a server-side rendered form includes the _csrf request parameter as a
-		 * hidden input.
-		 */
-			System.out.println("token resolved 2?"+csrfToken.getToken());
-
-		return this.delegate.resolveCsrfTokenValue(request, csrfToken);
 	}
-}
 
-final class CsrfCookieFilter extends OncePerRequestFilter {
+	// @Override
+	// public String resolveCsrfTokenValue(HttpServletRequest request, CsrfToken
+	// csrfToken) {
+	// /*
+	// * If the request contains a request header, use
+	// * CsrfTokenRequestAttributeHandler
+	// * to resolve the CsrfToken. This applies when a single-page application
+	// * includes
+	// * the header value automatically, which was obtained via a cookie containing
+	// * the
+	// * raw CsrfToken.
+	// */
+	// System.out.println("token resolved?" +
+	// request.getHeader(csrfToken.getHeaderName()) + csrfToken.getHeaderName());
+	// System.out.println(request.getHeader("X-XSRF-TOKEN"));
 
-	@Override
-	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-			throws ServletException, IOException {
-		CsrfToken csrfToken = (CsrfToken) request.getAttribute("_csrf");
-		// Render the token value to a cookie by causing the deferred token to be loaded
-		csrfToken.getToken();
-			System.out.println("token resolved 3?"+csrfToken.getToken());
+	// if (StringUtils.hasText(request.getHeader(csrfToken.getHeaderName()))) {
+	// System.out.println(csrfToken.getToken());
+	// System.out.println("super resolve " + super.resolveCsrfTokenValue(request,
+	// csrfToken));
+	// return super.resolveCsrfTokenValue(request, csrfToken);
+	// }
+	// /*
+	// * In all other cases (e.g. if the request contains a request parameter), use
+	// * XorCsrfTokenRequestAttributeHandler to resolve the CsrfToken. This applies
+	// * when a server-side rendered form includes the _csrf request parameter as a
+	// * hidden input.
+	// */
+	// System.out.println("token resolved 2?" + csrfToken.getToken());
 
-		filterChain.doFilter(request, response);
-	}
-}
+	// return this.delegate.resolveCsrfTokenValue(request, csrfToken);
+	// }
+	// }
+
+	// final class CsrfCookieFilter extends OncePerRequestFilter {
+
+	// @Override
+	// protected void doFilterInternal(HttpServletRequest request,
+	// HttpServletResponse response, FilterChain filterChain)
+	// throws ServletException, IOException {
+	// CsrfToken csrfToken = (CsrfToken) request.getAttribute("_csrf");
+	// // Render the token value to a cookie by causing the deferred token to be
+	// loaded
+	// csrfToken.getToken();
+	// System.out.println("token resolved 3?" + csrfToken.getToken());
+
+	// filterChain.doFilter(request, response);
+	// }
+	// }
+
 	@Bean
 	public AuthenticationManager authenticationManager(
 			UserDetailsService userDetailsService,
@@ -121,24 +136,26 @@ final class CsrfCookieFilter extends OncePerRequestFilter {
 
 	@Bean
 	public UserDetailsService userDetailsService() {
-		UserDetails userDetails = User.builder()//.withDefaultPasswordEncoder()
-			.username("user")
-			.password(passwordEncoder().encode("password"))
-			.roles("USER")
-			.build();
+		UserDetails userDetails = User.builder()// .withDefaultPasswordEncoder()
+				.username("user")
+				.password(passwordEncoder().encode("password"))
+				.roles("USER")
+				.build();
 
-			UserDetails admin = User.builder()
-        .username("admin")
-        .password(passwordEncoder().encode("password"))
-        .roles("USER", "ADMIN")
-        .build();
+		UserDetails admin = User.builder()
+				.username("admin")
+				.password(passwordEncoder().encode("password"))
+				.roles("USER", "ADMIN")
+				.build();
 
-		return new InMemoryUserDetailsManager(userDetails,admin);
+		return new InMemoryUserDetailsManager(userDetails, admin);
 	}
-@Autowired
+
+	@Autowired
 	public void configure(AuthenticationManagerBuilder builder) {
 		builder.eraseCredentials(false);
 	}
+
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return PasswordEncoderFactories.createDelegatingPasswordEncoder();

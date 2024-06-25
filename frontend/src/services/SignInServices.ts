@@ -4,29 +4,24 @@ import axios, { AxiosResponse } from "axios";
 import { AuthTokenState, setToken } from "../features/AuthToken/AuthTokenSlice";
 import { SERVER_URL } from "./api-config";
 
+axios.defaults.withCredentials = true;
+axios.defaults.xsrfHeaderName = "X-XSRF-TOKEN";
+axios.defaults.xsrfCookieName = "XSRF-TOKEN";
+
 export interface SignInInfo {
   username: string;
   password: string;
-  //_csrf: string | null;
+  _csrf: string | null;
 }
 export const signIn = async (
   data: SignInInfo,
   token: AuthTokenState
 ): Promise<AuthState> => {
-  // const headers = {
-  //   "Content-Type": "application/json",
-  //   [token.headerName]: token.token,
-  // };
+  console.log(token);
+  const headers={ 'X-XSRF-TOKEN': token};  
 
-  // const response = axios.get(SERVER_URL + "/login", {
-  //   method: "POST",
-  //   body: JSON.stringify(data),
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //   },
-  // });
-
-  const response = await axios.post(SERVER_URL + "/login", data);
+  //const response = await axios.post(SERVER_URL + "/login",{credentials:"include",headers});
+  const response = await axios.post(SERVER_URL + "/login",data);
   if (response.status === 403) {
     throw new Error("Access Denied");
   } else if (response.status !== 200) {
@@ -40,9 +35,5 @@ export const signIn = async (
 };
 
 export const getCSRF = async () => {
-  const response = await fetch(SERVER_URL + "/csrf");
-  const data = await response.json();
-  const csrf = data.token;
-  console.log(data);
-  return data;
+    //await axios.get(SERVER_URL+'/csrf');
 };

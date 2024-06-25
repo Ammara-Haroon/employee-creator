@@ -9,8 +9,10 @@ import { useNavigate } from "react-router-dom";
 import { resetToken, setToken } from "../../features/AuthToken/AuthTokenSlice";
 import { RootState } from "../../app/store";
 import { resetFilterParams } from "../../features/QueryParams/QueryParamsSlice";
+import { useCookies } from 'react-cookie';
 
 const LoginPage = () => {
+const [cookies, setCookie, removeCookie] = useCookies(['XSRF-TOKEN']);
   const formRef = useRef<HTMLFormElement>(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -28,30 +30,29 @@ const LoginPage = () => {
     dispatch(resetToken());
     dispatch(hide());
 
-    //getCSRF().then((token) => {
-    //dispatch(setToken(token));
-    if (formRef.current)
+    getCSRF().then(() => {
+    //dispatch(setToken({token:cookies['XSRF-TOKEN']}));
       signIn(
         Object.fromEntries(
           new FormData(formRef.current).entries()
         ) as SignInInfo,
-        null //token
+        cookies['XSRF-TOKEN']
       )
-        .then((data) => {
-          dispatch(updateAuthState(data));
-          if (data.authenticated) {
-            dispatch(hide());
-            navigate("/dashboard");
-          } else {
-            dispatch(logout());
-            dispatch(show("Login Failed. Bad Username or Password"));
-          }
-        })
-        .catch((e: any) => {
+      .then((data) => {
+        dispatch(updateAuthState(data));
+        if (data.authenticated) {
+          dispatch(hide());
+          navigate("/dashboard");
+        } else {
           dispatch(logout());
-          dispatch(show(e.message)); //"Login Failed. Bad Username or Password"));
-        });
-  };
+          dispatch(show("Login Failed. Bad Username or Password"));
+        }
+      })
+      .catch((e: any) => {
+        dispatch(logout());
+        dispatch(show(e.message)); //"Login Failed. Bad Username or Password"));
+      });
+  })};
 
   return (
     <div className="bg-gray-100 flex flex-col justify-center items-center border border-black w-screen h-screen">

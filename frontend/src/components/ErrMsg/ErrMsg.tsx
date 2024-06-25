@@ -9,7 +9,6 @@ const ErrMsg = () => {
   const { display, message } = useSelector(
     (state: RootState) => state.notificaton
   );
-  console.log(display, message);
   const dispatch = useDispatch();
   return (
     display && (
