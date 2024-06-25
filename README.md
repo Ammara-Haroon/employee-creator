@@ -77,7 +77,7 @@ logging.file.name=application.log
 
 ## Design Goals / Approach
 
-The main goal of the project are to learn and incorporate new/different tools that what I had used in my previous projects.
+The main goal of the project are to learn and incorporate new/different tools than what I had used in my previous projects.
 - Use Redux instead of useContext to manage states int the front end
 - Use axios instead of fetch to make API calls
 - Learn to us Tanstack Query/ React Query library 
