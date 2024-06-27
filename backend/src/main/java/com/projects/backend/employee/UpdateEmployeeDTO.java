@@ -1,6 +1,11 @@
 package com.projects.backend.employee;
 
 import org.hibernate.validator.constraints.Length;
+
+import com.projects.backend.employee.validators.ContractTypeConstraint;
+import com.projects.backend.employee.validators.DepartmentTypeConstraint;
+import com.projects.backend.employee.validators.EmploymentTypeConstraint;
+
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -31,7 +36,7 @@ public class UpdateEmployeeDTO {
 
   @ContractTypeConstraint
   private String contractType;
-  
+
   public String getDepartment() {
     return department;
   }
@@ -40,27 +45,24 @@ public class UpdateEmployeeDTO {
     return role;
   }
 
-
-
   @EmploymentTypeConstraint
   private String employmentType;
 
   @DepartmentTypeConstraint
   private String department;
-  
+
   @Pattern(regexp = ".*\\S.*", message = "role should contain at least 1 non-white-space characters")
   private String role;
 
-
-  @Pattern(regexp="^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1]).*$",message="date format should be yyyy-mm-dd")
+  @Pattern(regexp = "^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1]).*$", message = "date format should be yyyy-mm-dd")
   private String startDate;
 
-  @Pattern(regexp="^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1]).*$",message="date format should be yyyy-mm-dd")
+  @Pattern(regexp = "^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1]).*$", message = "date format should be yyyy-mm-dd")
   private String finishDate;
 
-  @Pattern(regexp="[1-9]|[1-3][0-9]|40",message="hours per week can be only be 1-40 inclusive")
+  @Pattern(regexp = "[1-9]|[1-3][0-9]|40", message = "hours per week can be only be 1-40 inclusive")
   private String hoursPerWeek;
- 
+
   @Override
   public String toString() {
     return "UpdateEmployeeDTO [firstName=" + firstName + ", middleName=" + middleName + ", lastName=" + lastName
@@ -68,7 +70,7 @@ public class UpdateEmployeeDTO {
         + contractType + ", employmentType=" + employmentType + ", startDate=" + startDate + ", finishDate="
         + finishDate + ", hoursPerWeek=" + hoursPerWeek + " ]";
   }
-  
+
   public String getFinishDate() {
     return finishDate;
   }
@@ -108,8 +110,6 @@ public class UpdateEmployeeDTO {
   public String getAddress() {
     return address;
   }
-
-
 
   public String getHoursPerWeek() {
     return hoursPerWeek;

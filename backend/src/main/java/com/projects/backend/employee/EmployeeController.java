@@ -26,7 +26,6 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-
 @RestController
 @RequestMapping("/employees")
 public class EmployeeController {
@@ -34,54 +33,55 @@ public class EmployeeController {
   EmployeeService employeeService;
 
   @GetMapping()
-  public ResponseEntity<Page<Employee>> findAllEmployees(@RequestParam String name,@RequestParam String department,@RequestParam String employmentType,@RequestParam String contractType,@RequestParam int page, @RequestParam(required=true,name="sort") String sort) {
-    System.out.printf("name:%s\ndepartment:%s\nemplpoyment:%s\ncontract:%s\npage:%d\nsort:%s\n" + //
-            "",name,department,contractType,employmentType,page,sort);
-    Page<Employee> allEmployees = this.employeeService.findAll(name,department,employmentType,contractType,page,sort);
+  public ResponseEntity<Page<Employee>> findAllEmployees(@RequestParam String name, @RequestParam String department,
+      @RequestParam String employmentType, @RequestParam String contractType, @RequestParam int page,
+      @RequestParam(required = true, name = "sort") String sort) {
+    Page<Employee> allEmployees = this.employeeService.findAll(name, department, employmentType, contractType, page,
+        sort);
     return new ResponseEntity<>(allEmployees, HttpStatus.OK);
   }
 
   @GetMapping("/{id}")
   public ResponseEntity<Employee> findEmployeeById(@PathVariable Long id) throws NotFoundException {
     Optional<Employee> maybeEmployee = this.employeeService.findById(id);
-    Employee foundEmployee = maybeEmployee.orElseThrow(() -> new NotFoundException(Employee.class.getSimpleName(),id));
+    Employee foundEmployee = maybeEmployee.orElseThrow(() -> new NotFoundException(Employee.class.getSimpleName(), id));
     return new ResponseEntity<>(foundEmployee, HttpStatus.OK);
   }
 
   @PatchMapping("/{id}")
   public ResponseEntity<Employee> updateEmployeeById(@PathVariable Long id, @Valid @RequestBody UpdateEmployeeDTO data)
-      throws NotFoundException, BadRequestException{
-    System.out.println(data);    
+      throws NotFoundException, BadRequestException {
     Optional<Employee> maybeEmployee;
     try {
       maybeEmployee = this.employeeService.updateById(id, data);
-    } catch(ValidationException ve){
+    } catch (ValidationException ve) {
       throw new BadRequestException(ve.getMessage());
     }
-    Employee updatedEmployee = maybeEmployee.orElseThrow(()->new NotFoundException(Employee.class.getSimpleName(), id));
+    Employee updatedEmployee = maybeEmployee
+        .orElseThrow(() -> new NotFoundException(Employee.class.getSimpleName(), id));
     return new ResponseEntity<>(updatedEmployee, HttpStatus.OK);
   }
 
   @DeleteMapping("/{id}")
   public ResponseEntity<Void> deleteEmployeeById(@PathVariable Long id) throws NotFoundException {
     boolean success = this.employeeService.deleteById(id);
-    if(!success){
-      throw new NotFoundException(Employee.class.getSimpleName(),id);
+    if (!success) {
+      throw new NotFoundException(Employee.class.getSimpleName(), id);
     }
-    
+
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
-  
+
   @PostMapping()
-  public ResponseEntity<Employee> createEmployee(@Valid @RequestBody CreateEmployeeDTO data) throws BadRequestException {
+  public ResponseEntity<Employee> createEmployee(@Valid @RequestBody CreateEmployeeDTO data)
+      throws BadRequestException {
     Optional<Employee> mayBeEmployee;
-    try{
-    mayBeEmployee = this.employeeService.create(data);
-   
-  }catch(ValidationException ve)
-  {
+    try {
+      mayBeEmployee = this.employeeService.create(data);
+
+    } catch (ValidationException ve) {
       throw new BadRequestException(ve.getMessage());
-  }
+    }
     Employee createdEmployee = mayBeEmployee.get();
     return new ResponseEntity<>(createdEmployee, HttpStatus.CREATED);
   }

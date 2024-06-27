@@ -7,6 +7,10 @@ import java.util.Date;
 
 import org.hibernate.validator.constraints.Length;
 
+import com.projects.backend.employee.validators.ContractTypeConstraint;
+import com.projects.backend.employee.validators.DepartmentTypeConstraint;
+import com.projects.backend.employee.validators.EmploymentTypeConstraint;
+
 import jakarta.validation.ValidationException;
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.Email;
@@ -41,7 +45,7 @@ public class CreateEmployeeDTO {
   @NotBlank
   @ContractTypeConstraint
   private String contractType;
-  
+
   @NotBlank
   @EmploymentTypeConstraint
   private String employmentType;
@@ -54,30 +58,25 @@ public class CreateEmployeeDTO {
     return role;
   }
 
-
-
   @NotBlank
   @DepartmentTypeConstraint
   private String department;
-  
+
   @NotBlank
   @Pattern(regexp = ".*\\S.*", message = "role should contain at least 1 non-white-space characters")
   private String role;
 
-
   @NotBlank
-  @Pattern(regexp="\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1]).*",message="date format should be yyyy-mm-dd")
+  @Pattern(regexp = "\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1]).*", message = "date format should be yyyy-mm-dd")
   private String startDate;
 
-  @Pattern(regexp="\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1]).*",message="date format should be yyyy-mm-dd")
+  @Pattern(regexp = "\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1]).*", message = "date format should be yyyy-mm-dd")
   private String finishDate;
 
   @Min(1)
   @Max(40)
   private int hoursPerWeek;
 
-  
-  
   @Override
   public String toString() {
     return "CreateEmployeeDTO [firstName=" + firstName + ", middleName=" + middleName + ", lastName=" + lastName
@@ -85,7 +84,7 @@ public class CreateEmployeeDTO {
         + contractType + ", employmentType=" + employmentType + ", startDate=" + startDate + ", finishDate="
         + finishDate + ", hoursPerWeek=" + hoursPerWeek + " ]";
   }
-  
+
   public String getFinishDate() {
     return finishDate;
   }
@@ -125,8 +124,6 @@ public class CreateEmployeeDTO {
   public String getAddress() {
     return address;
   }
-
-
 
   public int getHoursPerWeek() {
     return hoursPerWeek;

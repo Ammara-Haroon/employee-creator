@@ -1,6 +1,5 @@
 package com.projects.backend.login;
 
-
 import java.net.http.HttpResponse;
 
 import org.springframework.http.HttpStatus;
@@ -16,10 +15,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-
 @Controller
 public class LoginController {
-private final AuthenticationManager authenticationManager;
+	private final AuthenticationManager authenticationManager;
 
 	public LoginController(AuthenticationManager authenticationManager) {
 		this.authenticationManager = authenticationManager;
@@ -27,21 +25,16 @@ private final AuthenticationManager authenticationManager;
 
 	@PostMapping("/login")
 	public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest) {
-		System.out.println(loginRequest);
-		Authentication authenticationRequest =
-			UsernamePasswordAuthenticationToken.unauthenticated(loginRequest.username(), loginRequest.password());
-			System.out.println(authenticationRequest.toString());
-			Authentication authenticationResponse =
-			this.authenticationManager.authenticate(authenticationRequest);
-			System.out.println(authenticationResponse.toString());
-			AuthenticationResponse res = new AuthenticationResponse(authenticationResponse.isAuthenticated(), authenticationResponse.getAuthorities(), authenticationResponse.getName());
-			System.out.println(res.toString());
-			
-			return new ResponseEntity<>(res.toString(),HttpStatus.OK);
+		Authentication authenticationRequest = UsernamePasswordAuthenticationToken.unauthenticated(loginRequest.username(),
+				loginRequest.password());
+		Authentication authenticationResponse = this.authenticationManager.authenticate(authenticationRequest);
+		AuthenticationResponse res = new AuthenticationResponse(authenticationResponse.isAuthenticated(),
+				authenticationResponse.getAuthorities(), authenticationResponse.getName());
+
+		return new ResponseEntity<>(res.toString(), HttpStatus.OK);
 	}
 
 	public record LoginRequest(String username, String password) {
 	}
 
-	
 }
