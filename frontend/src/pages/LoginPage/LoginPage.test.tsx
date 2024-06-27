@@ -15,53 +15,19 @@ import { store } from "../../app/store";
 import * as signInServices from "../../services/SignInServices";
 import HomePage from "../HomePage/HomePage";
 import { AuthState } from "../../services/APIResponseInterface";
-import { AxiosResponse } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 import { QueryClient, QueryClientProvider } from "react-query";
-
+import * as LoginServices from "../../services/SignInServices";
 const axios = require("axios").default;
 
 describe("Login Page Tests", () => {
-  // it("", async () => {
-  //   const success: AuthState = {
-  //     authenticated: true,
-  //     authorities: ["ROLE_ADMIN"],
-  //     name: "user",
-  //   };
-  //   const mAxiosResponse = {
-  //     data: success,
-  //   } as AxiosResponse;
-
-  //   vi.spyOn(axios, "post").mockResolvedValue(mAxiosResponse);
-
-  //   render(
-  //     <QueryClientProvider client={new QueryClient()}>
-  //       <Provider store={store}>
-  //         <Routes>
-  //           <Route path="/dashboard" element={<HomePage />} />
-  //           <Route path="/" element={<LoginPage />} />
-  //         </Routes>
-  //       </Provider>
-  //     </QueryClientProvider>,
-  //     { wrapper: BrowserRouter }
-  //   );
-  //   const username = screen.getByLabelText(/username/i);
-  //   const password = screen.getByLabelText(/password/i);
-  //   const btn = screen.getByText(/sign/i);
-  //   const user = userEvent.setup();
-  //   await user.type(username, "user");
-  //   await user.type(password, "password");
-  //   await user.click(btn);
-  //   screen.debug();
-  //   const heading = await screen.findByText(/.*dashboard.*/i);
-  //   expect(heading).toBeInTheDocument();
-  // });
-
+ 
   it("Should display error message if login username and password is incorrect", async () => {
-    const failure: AuthState = {
-      authenticated: false,
-      authorities: [],
-      name: "random",
-    };
+    // const failure = {
+    //   authenticated: false,
+    //   authorities: [],
+    //   name: "random",
+    // };
     render(
       <Provider store={store}>
         <LoginPage />
@@ -69,12 +35,12 @@ describe("Login Page Tests", () => {
       { wrapper: BrowserRouter }
     );
 
-    const mAxiosResponse = {
-      data: failure,
-    } as AxiosResponse;
+  const mAxiosResponse = {
+      
+  } as AxiosResponse;
 
-    vi.spyOn(axios, "post").mockResolvedValue(mAxiosResponse);
-
+    vi.spyOn(LoginServices,"getCSRF").mockResolvedValue();
+    vi.spyOn(LoginServices,"signIn").mockRejectedValue(new Error());
     const username = screen.getByLabelText(/username/i);
     const password = screen.getByLabelText(/password/i);
     const btn = screen.getByText(/sign/i);

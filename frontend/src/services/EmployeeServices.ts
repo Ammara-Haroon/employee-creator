@@ -4,21 +4,6 @@ import { Employee, EmployeePageResponse } from "./APIResponseInterface";
 
 import { SERVER_URL } from "./api-config";
 
-// export const getAllEmployees = async (
-//   currentPage: number = 0
-// ): Promise<EmployeePageResponse> => {
-//   console.log(currentPage);
-//   const response = await fetch(`${SERVER_URL}/employees?page=${currentPage}`);
-//   const data = await response.json();
-//   console.log(data);
-//   data.content = data.content.map((entry: any) => ({
-//     ...entry,
-//     startDate: new Date(entry.startDate),
-//     finishDate: entry.finishDate && new Date(entry.finishDate),
-//   }));
-//   return data;
-// };
-
 export const getQueryParamsString = (
   queryParams: Partial<QueryParamsState>
 ): string => {

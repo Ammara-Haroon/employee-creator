@@ -107,13 +107,18 @@ describe("Employee Dashboard Authentication Tests", () => {
     const err = await screen.findByTestId(/error/i);
     expect(err).toBeInTheDocument();
   });
-  it("Should load dashboard with when user is authenticated", async () => {
+  it("Should load dashboard when user is authenticated", async () => {
     const success: AuthState = {
       authenticated: true,
       authorities: ["ROLE-USER"],
       name: "user",
     };
     store.dispatch(updateAuthState(success));
+     const mAxiosResponse = {
+      data: mockPage,
+    } as AxiosResponse;
+
+    vi.spyOn(axios, "get").mockResolvedValue(mAxiosResponse);
     render(
       <QueryClientProvider client={new QueryClient()}>
         <Provider store={store}>

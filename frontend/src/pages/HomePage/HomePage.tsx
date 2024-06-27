@@ -1,4 +1,4 @@
-import { FormEvent, MouseEvent, useRef } from "react";
+import { FormEvent, MouseEvent, useEffect, useRef } from "react";
 import { getAllEmployees } from "../../services/EmployeeServices";
 import { useQuery } from "react-query";
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
@@ -54,7 +54,9 @@ const HomePage = () => {
     retry: false,
     keepPreviousData: true,
   });
-  dispatch(updateTotalNumberOfPages(data?.totalPages));
+  useEffect(()=>{
+    dispatch(updateTotalNumberOfPages(data?.totalPages));
+  },[data]);
 
   const handleClick = (): void => {
     navigate("/add");

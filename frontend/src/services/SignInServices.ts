@@ -11,8 +11,10 @@ export interface SignInInfo {
   _csrf: string | null;
 }
 export const signIn = async (
-  data: SignInInfo
+  data: SignInInfo,token:any
 ): Promise<AuthState> => {
+  axios.defaults.headers.common['X-XSRF-TOKEN'] = token;
+    axios.defaults.withCredentials=true;
   let response;
 try{
   response = await axios.post(SERVER_URL + "/login",data);
@@ -31,8 +33,6 @@ if (!response?.data.authenticated) {
   return response.data;
  };
 
-export const getCSRF = async (token:any) => {
+export const getCSRF = async () => {
     await axios.get(SERVER_URL+'/csrf');
-    axios.defaults.headers.common['X-XSRF-TOKEN'] = token;
-    axios.defaults.withCredentials=true;
 };

@@ -28,15 +28,9 @@ const [cookies, setCookie, removeCookie] = useCookies(['XSRF-TOKEN']);
     e.preventDefault();
     dispatch(logout());
     dispatch(resetFilterParams());
-    dispatch(resetToken());
     dispatch(hide());
-
-  //   axios.defaults.headers.common['X-XSRF-TOKEN'] = cookies['XSRF-TOKEN'];
-  //   axios.defaults.withCredentials=true;
-  //  axios.delete('http://localhost:8080/employees/2').then(()=>console.log("here"));
-    
-getCSRF(cookies['XSRF-TOKEN']).then(() => {
-    //dispatch(setToken({token:cookies['XSRF-TOKEN']}));
+ 
+getCSRF().then(() => {
       signIn(
         Object.fromEntries(
           new FormData(formRef.current).entries()
@@ -57,7 +51,8 @@ getCSRF(cookies['XSRF-TOKEN']).then(() => {
         dispatch(logout());
         dispatch(show(e.message)); //"Login Failed. Bad Username or Password"));
       });
-  })};
+  })
+};
 
   return (
     <div className="bg-gray-100 flex flex-col justify-center items-center border border-black w-screen h-screen">

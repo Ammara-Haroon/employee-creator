@@ -56,7 +56,7 @@ const schema = z.object({
   employmentType: z.string(),
   contractType: z.string(),
   department: z.string(),
-  role: z.string().min(1, { message: "Role should be at least 1 character long" }),
+  role: z.string().min(1, { message: "Role should be at least 1 character long" })
 });
 
 export default schema;
