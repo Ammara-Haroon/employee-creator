@@ -90,6 +90,7 @@ The main goal of the project are to learn and incorporate new/different tools th
 The project was implemented with these goals in mind and the main purpose was to experiment with tools I have not been exposed to before.
 ### FrontEnd
 - Authentication from server-side is used to render elements on the page. Add, delete, edit and view more buttons are displayed for an admin user only.
+- *CSRF* token is retrieved from backend and added to subsequent server calls as a header value and cookie. 
 - The filters are based on 3 different fields along with a search and sort for names. These all form query parameters to the API call to the backend and Redux is used to manage them.
 - Whenever filters change the query parameters in *Redux* are updated. These are linked to *TanStack* get query arguments which uses *axios* to make API calls.
 - *React Form* is used as an edit/ add employee form and error handling is done using *zod* resolver
@@ -98,6 +99,7 @@ The project was implemented with these goals in mind and the main purpose was to
 
 ### Backend
 - Basic form login authentication is done through *Java Spring Security* by defining SecurityConfig class and adding SecurityFilterChain. Two users with role "user" and "admin" are defined in memory. 
+- CSRF Token authentication is also enabled
 - Added an Employee controller to manage CRUD operations
 - Used Validation I/O and annotations to implement basic validations
 - Created custom validator annotations to validate enum values
@@ -178,6 +180,7 @@ The project was implemented with these goals in mind and the main purpose was to
 - Fixed server sides tests to work with spring security
 - Added new backend tests to get method to incorporate filter testing
 - Created CI pipeline
+# 27/06/2024 - Integrated csrf token authentication
 
 ## What did you struggle with?
  Learning so many new tools in a span of short amount of time was filled with roadblocks and general errors that anyone trying these tools for the first time might run into and therefore, things were not as quick if I had worked with something I was already familiar with. It definitely accelerated my learning and strengthened my confidence and motivation to dive into new tools. These are the few road blocks I faced:

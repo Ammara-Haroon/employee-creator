@@ -40,15 +40,10 @@ public class SecurityConfig {
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-		http.formLogin(form -> form.loginPage("http://localhost:5173"))
-				.csrf(csrf -> csrf.disable());
 
-		// http.csrf(csrf ->
-		// csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-		// .csrfTokenRequestHandler(new SpaCsrfTokenRequestHandler())).formLogin(
-		// form -> form.loginPage("http://localhost:5173"))
-		// .authorizeHttpRequests(req ->
-		// req.requestMatchers("/emoloyees").hasRole("ADMIN"));
+		http.csrf(csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+				.csrfTokenRequestHandler(new SpaCsrfTokenRequestHandler())).formLogin(
+						form -> form.loginPage("http://localhost:5173"));
 
 		return http.build();
 	}

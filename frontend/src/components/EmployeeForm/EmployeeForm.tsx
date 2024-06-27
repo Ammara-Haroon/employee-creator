@@ -235,8 +235,14 @@ const EmployeeForm = ({ mode, employee, saveEmployee }: IEmployeeFormProps) => {
             type="text"
             placeholder="@role"
             {...register("role")}
-            required
           />
+          {errors.role ? (
+            <small data-testid="error" className={errorStyleClass}>
+              {errors.role.message}
+            </small>
+          ) : (
+            <small>&#8203;</small>
+          )}
         </div>
         <div className={radioGroupStyleClass}>
           <label>What is contract type?</label>

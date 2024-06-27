@@ -10,6 +10,7 @@ import { resetToken, setToken } from "../../features/AuthToken/AuthTokenSlice";
 import { RootState } from "../../app/store";
 import { resetFilterParams } from "../../features/QueryParams/QueryParamsSlice";
 import { useCookies } from 'react-cookie';
+import axios from "axios";
 
 const LoginPage = () => {
 const [cookies, setCookie, removeCookie] = useCookies(['XSRF-TOKEN']);
@@ -30,7 +31,11 @@ const [cookies, setCookie, removeCookie] = useCookies(['XSRF-TOKEN']);
     dispatch(resetToken());
     dispatch(hide());
 
-    getCSRF().then(() => {
+  //   axios.defaults.headers.common['X-XSRF-TOKEN'] = cookies['XSRF-TOKEN'];
+  //   axios.defaults.withCredentials=true;
+  //  axios.delete('http://localhost:8080/employees/2').then(()=>console.log("here"));
+    
+getCSRF(cookies['XSRF-TOKEN']).then(() => {
     //dispatch(setToken({token:cookies['XSRF-TOKEN']}));
       signIn(
         Object.fromEntries(
