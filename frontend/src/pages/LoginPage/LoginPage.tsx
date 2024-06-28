@@ -29,7 +29,6 @@ const [cookies, setCookie, removeCookie] = useCookies(['XSRF-TOKEN']);
       if(formRef.current) {
         const obj = Object.fromEntries(new FormData(formRef.current).entries()
         );
-        console.log(obj);
         const signInInfo:SignInInfo = {username:obj["username"].toString(),password:obj["password"].toString()};
         signIn(signInInfo, cookies['XSRF-TOKEN'])
         .then((data) => {

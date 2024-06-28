@@ -49,7 +49,6 @@ const HomePage = () => {
 
   const queryParams = useSelector((state: RootState) => state.queryParams);
   const {departments} = useSelector((state: RootState) => state.departments);
-
   const { isLoading, isError, data } = useQuery({
     queryKey: ["employees", queryParams],
     queryFn: () => getAllEmployees(queryParams),
@@ -57,11 +56,10 @@ const HomePage = () => {
     retry: false,
     keepPreviousData: true,
   });
-  
   useEffect(()=>{
     try{
-      getAllDepartments().then((data)=>dispatch(setDepartments(data)));
-    }catch(error:any){
+      getAllDepartments().then((deptList)=>dispatch(setDepartments(deptList)));
+    } catch(error:any) {
       dispatch(show(error.message));
     }
   },[]);
@@ -141,7 +139,7 @@ const HomePage = () => {
         </div>
         <div className="text-sm text-slate-800 flex justify-around text-right">
           <div className={checkBoxGroupStyleClass}>
-            {departments.map((dept)=>(<div key={dept.id} className={checkBoxStyleClass}>
+            {departments && departments.map((dept)=>(<div key={dept.id} className={checkBoxStyleClass}>
               <label htmlFor={dept.name.toLowerCase()}>{toTitleCase(dept.name)}</label>
               <input
                 className="mx-1"

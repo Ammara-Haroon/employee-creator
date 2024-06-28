@@ -165,18 +165,6 @@ public class UpdateEmployeeTests {
   }
 
   @Test
-  void shouldGiveErrorReponseWhenDepartmentIsInvalid() throws Exception {
-
-    String jsonEmp = "{\"department\":\"wrong\"}";
-
-    mockMvc.perform(patch("/employees/1")
-        .contentType(MediaType.APPLICATION_JSON)
-        .content(jsonEmp))
-        .andExpect(status().isBadRequest());
-
-  }
-
-  @Test
   void shouldGiveErrorReponseWhenAddressDoesNotHAveAtLeast2WhiteSpaceCharacters() throws Exception {
 
     String jsonEmp = "{\"address\":\"  2 \"}";

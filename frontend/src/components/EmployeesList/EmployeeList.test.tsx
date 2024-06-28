@@ -27,7 +27,7 @@ const mockFinance:Department = {
   name:"FINANCE"
 }
 const mockIT:Department = {
-  id:2,
+  id:3,
   name:"IT"
 }
 

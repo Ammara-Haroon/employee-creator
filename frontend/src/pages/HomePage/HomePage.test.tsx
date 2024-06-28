@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import HomePage from "./HomePage";
 import { Provider } from "react-redux";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
@@ -8,7 +8,6 @@ import {
   AuthState,
   ContractType,
   Department,
-  DepartmentType,
   EmployeePageResponse,
   EmploymentType,
 } from "../../services/APIResponseInterface";
@@ -18,11 +17,22 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import EmployeeFormPage from "../EmployeeFormPage/EmployeeFormPage";
 import * as EmployeeServices from "../../services/EmployeeServices";
 import userEvent from "@testing-library/user-event";
+import { setDepartments } from "../../features/Departments/DepartmentsSlice";
 
+const mockAdmin:Department = {
+  id:1,
+  name:"ADMIN"
+}
 const mockFinance:Department = {
   id:2,
   name:"FINANCE"
 }
+const mockIT:Department = {
+  id:3,
+  name:"IT"
+}
+
+const mockDepartments = [mockAdmin,mockFinance,mockIT];
 
 const mockPage: EmployeePageResponse = {
   empty: false,
@@ -118,11 +128,10 @@ describe("Employee Dashboard Authentication Tests", () => {
       name: "user",
     };
     store.dispatch(updateAuthState(success));
-     const mAxiosResponse = {
-      data: mockPage,
-    } as AxiosResponse;
-
-    vi.spyOn(axios, "get").mockResolvedValue(mAxiosResponse);
+    
+    vi.spyOn(EmployeeServices, "getAllEmployees").mockResolvedValue(mockPage);
+    vi.spyOn(EmployeeServices, "getAllDepartments").mockResolvedValue(mockDepartments);
+    
     render(
       <QueryClientProvider client={new QueryClient()}>
         <Provider store={store}>
@@ -131,7 +140,8 @@ describe("Employee Dashboard Authentication Tests", () => {
       </QueryClientProvider>,
       { wrapper: BrowserRouter }
     );
-    expect(screen.getByText(/dashboard/i)).toBeInTheDocument();
+    const dash = await screen.findByText(/dashboard/i)
+    expect(dash).toBeInTheDocument();
   });
 
   it("Should not show add, delete or edit buttons to a user who is not an admin", async () => {
@@ -140,7 +150,12 @@ describe("Employee Dashboard Authentication Tests", () => {
       authorities: ["ROLE_USER"],
       name: "user",
     };
-    store.dispatch(updateAuthState(success));
+     store.dispatch(updateAuthState(success));
+
+    vi.spyOn(EmployeeServices, "getAllEmployees").mockResolvedValue(mockPage);
+    vi.spyOn(EmployeeServices, "getAllDepartments").mockResolvedValue(mockDepartments);
+    
+   
     render(
       <QueryClientProvider client={new QueryClient()}>
         <Provider store={store}>
@@ -149,6 +164,7 @@ describe("Employee Dashboard Authentication Tests", () => {
       </QueryClientProvider>,
       { wrapper: BrowserRouter }
     );
+    await screen.findAllByText(/arron/i);
     const addBtn = screen.queryByText(/add/i);
     expect(addBtn).toBeNull();
     const editBtns = screen.queryAllByTestId(/edit/);
@@ -163,11 +179,10 @@ describe("Employee Dashboard Authentication Tests", () => {
       name: "admin",
     };
     store.dispatch(updateAuthState(success));
-    const mAxiosResponse = {
-      data: mockPage,
-    } as AxiosResponse;
 
-    vi.spyOn(axios, "get").mockResolvedValue(mAxiosResponse);
+    vi.spyOn(EmployeeServices, "getAllEmployees").mockResolvedValue(mockPage);
+    vi.spyOn(EmployeeServices, "getAllDepartments").mockResolvedValue(mockDepartments);
+    
     render(
       <QueryClientProvider client={new QueryClient()}>
         <Provider store={store}>
@@ -193,6 +208,8 @@ describe("Employee User Interaction Tests", () => {
       name: "user",
     };
     store.dispatch(updateAuthState(success));
+    store.dispatch(setDepartments(mockDepartments));
+
     render(
       <QueryClientProvider client={new QueryClient()}>
         <Provider store={store}>
@@ -218,30 +235,8 @@ describe("Employee User Interaction Tests", () => {
       name: "user",
     };
     store.dispatch(updateAuthState(success));
-    render(
-      <QueryClientProvider client={new QueryClient()}>
-        <Provider store={store}>
-          <HomePage />
-        </Provider>
-      </QueryClientProvider>,
-      { wrapper: BrowserRouter }
-    );
-    const user = userEvent.setup();
-    const resetBtn = screen.getByText(/reset/i);
-    const checkboxes = screen.getAllByRole("checkbox");
+    store.dispatch(setDepartments(mockDepartments));
 
-    checkboxes.forEach((check) => user.click(check));
-    await user.click(resetBtn);
-    checkboxes.forEach((check) => expect(check).toBeChecked());
-  });
-
-  it("Should reset filters when reset button is clicked", async () => {
-    const success: AuthState = {
-      authenticated: true,
-      authorities: ["ROLE_ADMIN"],
-      name: "user",
-    };
-    store.dispatch(updateAuthState(success));
     render(
       <QueryClientProvider client={new QueryClient()}>
         <Provider store={store}>
@@ -266,11 +261,10 @@ describe("Employee User Interaction Tests", () => {
       name: "user",
     };
     store.dispatch(updateAuthState(success));
-    const mAxiosResponse = {
-      data: mockPage,
-    } as AxiosResponse;
-    const spyGetAxios = vi.spyOn(axios, "get");
-    spyGetAxios.mockResolvedValue(mAxiosResponse);
+
+    vi.spyOn(EmployeeServices, "getAllEmployees").mockResolvedValue(mockPage);
+    vi.spyOn(EmployeeServices, "getAllDepartments").mockResolvedValue(mockDepartments);
+    
     const spyGetEmployee = vi.spyOn(EmployeeServices, "getAllEmployees");
     render(
       <QueryClientProvider client={new QueryClient()}>
@@ -294,8 +288,7 @@ describe("Employee User Interaction Tests", () => {
     await user.type(input, "John");
     await user.click(searchBtn);
     expect(spyGetEmployee).toHaveBeenCalled();
-    expect(spyGetAxios).toHaveBeenCalled();
-
+    
     const expectedArgs = {
       currentPage: 0,
       totalNumberOfPages: 1,

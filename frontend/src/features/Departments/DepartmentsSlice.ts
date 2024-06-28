@@ -14,7 +14,7 @@ export const departmentsSlice = createSlice({
   initialState,
   reducers: {
     setDepartments: (state, payload) => {
-      state.departments = payload.payload;
+      state.departments = [...payload.payload];
     },
    
   },
