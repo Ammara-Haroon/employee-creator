@@ -1,5 +1,5 @@
 import { FormEvent, MouseEvent, useEffect, useRef } from "react";
-import { getAllEmployees } from "../../services/EmployeeServices";
+import { getAllDepartments, getAllEmployees } from "../../services/EmployeeServices";
 import { useQuery } from "react-query";
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 import ErrMsg from "../../components/ErrMsg/ErrMsg";
@@ -23,6 +23,8 @@ import {
   updateTotalNumberOfPages,
 } from "../../features/QueryParams/QueryParamsSlice";
 import { isAdmin } from "../../features/Auth/AuthSlice";
+import { setDepartments } from "../../features/Departments/DepartmentsSlice";
+import { toTitleCase } from "../../services/utility";
 
 const HomePage = () => {
   const inputStyleClass =
@@ -34,7 +36,7 @@ const HomePage = () => {
   const checkBoxGroupStyleClass = "px-1 py-2";
   const checkBoxStyleClass = "m-1";
   const formRef = useRef<HTMLFormElement>(null);
-  const arr = new Array(7).fill(0).map((el, index) => index);
+  const searchRef = useRef<HTMLInputElement>(null);
 
   const { authenticated } = useSelector((state: RootState) => state.auth);
   const roleAdmin = isAdmin();
@@ -46,6 +48,7 @@ const HomePage = () => {
   }
 
   const queryParams = useSelector((state: RootState) => state.queryParams);
+  const {departments} = useSelector((state: RootState) => state.departments);
 
   const { isLoading, isError, data } = useQuery({
     queryKey: ["employees", queryParams],
@@ -54,6 +57,15 @@ const HomePage = () => {
     retry: false,
     keepPreviousData: true,
   });
+  
+  useEffect(()=>{
+    try{
+      getAllDepartments().then((data)=>dispatch(setDepartments(data)));
+    }catch(error:any){
+      dispatch(show(error.message));
+    }
+  },[]);
+
   useEffect(()=>{
     dispatch(updateTotalNumberOfPages(data?.totalPages));
   },[data]);
@@ -82,8 +94,7 @@ const HomePage = () => {
       )
     );
   };
-
-  return (
+    return(
     <div className="bg-gray-200">
       <div className="py-5 px-2  flex justify-between flex-wrap">
         <h1 className="text-2xl font-bold text-cyan-900 uppercase ">
@@ -116,50 +127,32 @@ const HomePage = () => {
           >
             Search For :
           </label>
+          <div>
           <input
             className={inputStyleClass}
             id="search"
             type="text"
             name="search"
             minLength={1}
+            ref={searchRef}
           />
+          <button className="hover:text-teal-500 text-cyan-800 p-1" onClick={()=>{searchRef.current ? searchRef.current.value="":null;}}>x</button>
+          </div>
         </div>
         <div className="text-sm text-slate-800 flex justify-around text-right">
           <div className={checkBoxGroupStyleClass}>
-            <div className={checkBoxStyleClass}>
-              <label htmlFor="admin">Admin</label>
+            {departments.map((dept)=>(<div key={dept.id} className={checkBoxStyleClass}>
+              <label htmlFor={dept.name.toLowerCase()}>{toTitleCase(dept.name)}</label>
               <input
                 className="mx-1"
                 defaultChecked={true}
                 type="checkbox"
-                id="admin"
-                name="admin"
-                value="ADMIN"
+                id={dept.name.toLowerCase()}
+                name={dept.name.toLowerCase()}
+                value={dept.name}
               />
-            </div>
-            <div className={checkBoxStyleClass}>
-              <label htmlFor="finance">Finance</label>
-              <input
-                className="mx-1"
-                defaultChecked={true}
-                type="checkbox"
-                id="finance"
-                name="finance"
-                value="FINANCE"
-              />
-            </div>
-            <div className={checkBoxStyleClass}>
-              <label htmlFor="it">I.T.</label>
-              <input
-                className="mx-1"
-                type="checkbox"
-                defaultChecked={true}
-                id="it"
-                name="it"
-                value="IT"
-              />
-            </div>
-          </div>
+            </div>))}
+           </div>
           <div className={checkBoxGroupStyleClass}>
             <div className={checkBoxStyleClass}>
               <label htmlFor="permanent">Permanent</label>
@@ -254,7 +247,6 @@ const HomePage = () => {
           <button
             className="text-cyan-900  hover:text-teal-500 disabled:text-slate-700"
             onClick={() => dispatch(nextPage())}
-            // Disable the Next Page button until we know a next page is available
             disabled={data?.last}
           >
             <FontAwesomeIcon icon={faArrowRight} />

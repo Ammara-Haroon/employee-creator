@@ -1,7 +1,6 @@
 import axios from "axios";
 import { QueryParamsState } from "../features/QueryParams/QueryParamsSlice";
-import { Employee, EmployeePageResponse } from "./APIResponseInterface";
-
+import { Department, Employee, EmployeeData, EmployeePageResponse } from "./APIResponseInterface";
 import { SERVER_URL } from "./api-config";
 
 export const getQueryParamsString = (
@@ -63,7 +62,7 @@ export const getAllEmployees = async (
   return data;
 };
 
-export const createEmployee = async (data: Employee): Promise<Employee> => {
+export const createEmployee = async (data: EmployeeData): Promise<Employee> => {
   const response = await axios.post(SERVER_URL + "/employees", data);
   return response.data;
 };
@@ -72,11 +71,21 @@ export const deleteEmployee = async (id: number): Promise<void> => {
   await axios.delete(`${SERVER_URL}/employees/${id}`);
 };
 
-export const updateEmployee = async (data: Employee): Promise<Employee> => {
+export const updateEmployee = async (data: EmployeeData): Promise<Employee> => {
   const response = await axios.patch(
     `${SERVER_URL}/employees/${data.id}`,
     data
   );
   if (response.status !== 200) console.log(response.statusText);
   return response.data;
+};
+
+
+export const getAllDepartments = async (
+): Promise<Department[]> => {
+  const response = await axios.get(
+    `${SERVER_URL}/departments`
+  );
+  const data = response.data;
+  return data;
 };

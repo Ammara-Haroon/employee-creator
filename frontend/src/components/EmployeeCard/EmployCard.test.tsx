@@ -8,14 +8,18 @@ import userEvent from "@testing-library/user-event";
 import {
   ContractType,
   EmploymentType,
-  DepartmentType,
-  Employee,
   AuthState,
+  Employee,
+  Department,
 } from "../../services/APIResponseInterface";
 import { vi } from "vitest";
 import { updateAuthState } from "../../features/Auth/AuthSlice";
 
-const mockEmployee = {
+const mockDept:Department = {
+  id:1,
+  name:"ADMIN"
+}
+const mockEmployee:Employee = {
   id: 387,
   firstName: "Arron",
   middleName: "Cary",
@@ -28,7 +32,7 @@ const mockEmployee = {
   finishDate: null,
   employmentType: EmploymentType.FULL_TIME,
   hoursPerWeek: 38,
-  department: DepartmentType.FINANCE,
+  department: mockDept,
   role: "Chief Hospitality Supervisor",
 };
 describe("Employee Card Tests", () => {

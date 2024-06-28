@@ -4,6 +4,7 @@ import { BrowserRouter } from "react-router-dom";
 import {
   AuthState,
   ContractType,
+  Department,
   DepartmentType,
   Employee,
   EmploymentType,
@@ -15,8 +16,20 @@ import { store } from "../../app/store";
 import axios, { AxiosResponse } from "axios";
 import { vi } from "vitest";
 import { updateAuthState } from "../../features/Auth/AuthSlice";
-import HomePage from "../../pages/HomePage/HomePage";
 import userEvent from "@testing-library/user-event";
+
+const mockAdmin:Department = {
+  id:1,
+  name:"ADMIN"
+}
+const mockFinance:Department = {
+  id:2,
+  name:"FINANCE"
+}
+const mockIT:Department = {
+  id:2,
+  name:"IT"
+}
 
 const mockEmployees: Employee[] = [
   {
@@ -32,7 +45,7 @@ const mockEmployees: Employee[] = [
     finishDate: null,
     employmentType: EmploymentType.FULL_TIME,
     hoursPerWeek: 38,
-    department: DepartmentType.FINANCE,
+    department: mockFinance,
     role: "Chief Hospitality Supervisor",
   },
   {
@@ -48,7 +61,7 @@ const mockEmployees: Employee[] = [
     finishDate: null,
     employmentType: EmploymentType.FULL_TIME,
     hoursPerWeek: 30,
-    department: DepartmentType.FINANCE,
+    department: mockFinance,
     role: "Customer Strategist",
   },
   {
@@ -64,7 +77,7 @@ const mockEmployees: Employee[] = [
     finishDate: null,
     employmentType: EmploymentType.FULL_TIME,
     hoursPerWeek: 31,
-    department: DepartmentType.FINANCE,
+    department: mockFinance,
     role: "Customer Supervisor",
   },
   {
@@ -80,7 +93,7 @@ const mockEmployees: Employee[] = [
     finishDate: null,
     employmentType: EmploymentType.FULL_TIME,
     hoursPerWeek: 34,
-    department: DepartmentType.FINANCE,
+    department: mockFinance,
     role: "Community-Services Producer",
   },
 ];

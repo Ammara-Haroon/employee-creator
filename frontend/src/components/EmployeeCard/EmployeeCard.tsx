@@ -1,14 +1,10 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Employee } from "../../services/APIResponseInterface";
-import { deleteEmployee } from "../../services/EmployeeServices";
 import {
   faAdd,
   faAddressBook,
-  faAddressCard,
   faCalendar,
   faClock,
-  faDeleteLeft,
-  faDoorClosed,
   faEnvelope,
   faPencil,
   faPhone,
@@ -20,8 +16,6 @@ import { toTitleCase } from "../../services/utility";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { faExclamation } from "@fortawesome/free-solid-svg-icons/faExclamation";
-import { useSelector } from "react-redux";
-import { RootState } from "../../app/store";
 import { isAdmin } from "../../features/Auth/AuthSlice";
 dayjs.extend(relativeTime);
 dayjs().format();
@@ -67,7 +61,7 @@ const EmployeeCard = ({
           {employee.role}
         </td>
         <td className=" hidden sm:table-cell text-center">
-          {toTitleCase(employee.department)}
+          {toTitleCase(employee.department.name)}
         </td>
 
         {roleAdmin && (
@@ -94,7 +88,7 @@ const EmployeeCard = ({
         <tr className=" text-slate-800 indent-10 text-sm">
           <td>
             <p className="font-semibold text-ellipsis overflow-hidden text-nowrap">
-              {employee.role + " " + toTitleCase(employee.department)}
+              {employee.role + " " + toTitleCase(employee.department.name)}
             </p>
             <p className="text-xs font-semibold text-ellipsis overflow-hidden text-nowrap">
               {toTitleCase(employee.employmentType) +

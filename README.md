@@ -181,6 +181,7 @@ The project was implemented with these goals in mind and the main purpose was to
 - Added new backend tests to get method to incorporate filter testing
 - Created CI pipeline
 # 27/06/2024 - Integrated csrf token authentication
+# 28/06/2024 - Separated Department from Employee entity and moved it to a different table
 
 ## What did you struggle with?
  Learning so many new tools in a span of short amount of time was filled with roadblocks and general errors that anyone trying these tools for the first time might run into and therefore, things were not as quick if I had worked with something I was already familiar with. It definitely accelerated my learning and strengthened my confidence and motivation to dive into new tools. These are the few road blocks I faced:

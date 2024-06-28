@@ -1,6 +1,4 @@
-import React, { useState } from "react";
-import EmployeeForm from "../../components/EmployeeForm/EmployeeForm";
-import { Employee } from "../../services/APIResponseInterface";
+import { EmployeeData } from "../../services/APIResponseInterface";
 import { useMutation, useQueryClient } from "react-query";
 import {
   createEmployee,
@@ -9,7 +7,6 @@ import {
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Mode } from "./Mode";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowAltCircleDown } from "@fortawesome/free-regular-svg-icons";
 import { faArrowAltCircleLeft } from "@fortawesome/free-solid-svg-icons";
 import ErrMsg from "../../components/ErrMsg/ErrMsg";
 import { useDispatch, useSelector } from "react-redux";
@@ -17,6 +14,7 @@ import { show } from "../../features/Notifcations/NotificationSlice";
 import { RootState } from "../../app/store";
 import { isAdmin } from "../../features/Auth/AuthSlice";
 import { resetFilterParams } from "../../features/QueryParams/QueryParamsSlice";
+import EmployeeForm from "../../components/EmployeeForm/EmployeeForm";
 
 const EmployeeFormPage = () => {
   const queryClient = useQueryClient();
@@ -44,7 +42,7 @@ const EmployeeFormPage = () => {
     },
   });
 
-  const saveEmployee = (emp: Employee): void => {
+  const saveEmployee = (emp: EmployeeData): void => {
     mutation.mutate(emp);
     dispatch(resetFilterParams());
     navigate("/dashboard");

@@ -3,7 +3,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../app/store";
 import { hide } from "../../features/Notifcations/NotificationSlice";
-import { useNavigate } from "react-router-dom";
 
 const ErrMsg = () => {
   const { display, message } = useSelector(

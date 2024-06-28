@@ -1,7 +1,6 @@
-import React from "react";
 import { Employee, SortType } from "../../services/APIResponseInterface";
 import EmployeeCard from "../EmployeeCard/EmployeeCard";
-import { useLocation, useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 import { useMutation, useQueryClient } from "react-query";
 import { deleteEmployee } from "../../services/EmployeeServices";
 import { isAdmin } from "../../features/Auth/AuthSlice";

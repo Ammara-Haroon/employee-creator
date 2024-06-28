@@ -1,4 +1,4 @@
-import { render, renderHook, screen, waitFor } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import HomePage from "./HomePage";
 import { Provider } from "react-redux";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
@@ -7,18 +7,22 @@ import { updateAuthState } from "../../features/Auth/AuthSlice";
 import {
   AuthState,
   ContractType,
+  Department,
   DepartmentType,
   EmployeePageResponse,
   EmploymentType,
 } from "../../services/APIResponseInterface";
 import { vi } from "vitest";
 import axios, { AxiosResponse } from "axios";
-import { Query, QueryClient, QueryClientProvider, useQuery } from "react-query";
-import App from "../../App";
+import { QueryClient, QueryClientProvider } from "react-query";
 import EmployeeFormPage from "../EmployeeFormPage/EmployeeFormPage";
-import LoginPage from "../LoginPage/LoginPage";
 import * as EmployeeServices from "../../services/EmployeeServices";
 import userEvent from "@testing-library/user-event";
+
+const mockFinance:Department = {
+  id:2,
+  name:"FINANCE"
+}
 
 const mockPage: EmployeePageResponse = {
   empty: false,
@@ -42,7 +46,7 @@ const mockPage: EmployeePageResponse = {
       finishDate: null,
       employmentType: EmploymentType.FULL_TIME,
       hoursPerWeek: 38,
-      department: DepartmentType.FINANCE,
+      department: mockFinance,
       role: "Chief Hospitality Supervisor",
     },
     {
@@ -58,7 +62,7 @@ const mockPage: EmployeePageResponse = {
       finishDate: null,
       employmentType: EmploymentType.FULL_TIME,
       hoursPerWeek: 30,
-      department: DepartmentType.FINANCE,
+      department: mockFinance,
       role: "Customer Strategist",
     },
     {
@@ -74,7 +78,7 @@ const mockPage: EmployeePageResponse = {
       finishDate: null,
       employmentType: EmploymentType.FULL_TIME,
       hoursPerWeek: 31,
-      department: DepartmentType.FINANCE,
+      department: mockFinance,
       role: "Customer Supervisor",
     },
     {
@@ -90,7 +94,7 @@ const mockPage: EmployeePageResponse = {
       finishDate: null,
       employmentType: EmploymentType.FULL_TIME,
       hoursPerWeek: 34,
-      department: DepartmentType.FINANCE,
+      department: mockFinance,
       role: "Community-Services Producer",
     },
   ],

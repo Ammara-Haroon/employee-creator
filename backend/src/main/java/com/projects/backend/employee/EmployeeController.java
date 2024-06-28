@@ -8,7 +8,6 @@ import com.projects.backend.exceptions.NotFoundException;
 import jakarta.validation.Valid;
 import jakarta.validation.ValidationException;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.apache.coyote.BadRequestException;
@@ -22,7 +21,6 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -78,7 +76,9 @@ public class EmployeeController {
     Optional<Employee> mayBeEmployee;
     try {
       mayBeEmployee = this.employeeService.create(data);
-
+      if (mayBeEmployee.isEmpty()) {
+        throw new BadRequestException("Department name is invalid");
+      }
     } catch (ValidationException ve) {
       throw new BadRequestException(ve.getMessage());
     }

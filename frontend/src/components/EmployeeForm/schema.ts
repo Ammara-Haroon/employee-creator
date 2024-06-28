@@ -1,9 +1,4 @@
 import * as z from "zod";
-import {
-  ContractType,
-  DepartmentType,
-  EmploymentType,
-} from "../../services/APIResponseInterface";
 
 const schema = z.object({
   firstName: z

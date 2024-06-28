@@ -3,15 +3,10 @@ package com.projects.backend.employee;
 import org.hibernate.validator.constraints.Length;
 
 import com.projects.backend.employee.validators.ContractTypeConstraint;
-import com.projects.backend.employee.validators.DepartmentTypeConstraint;
 import com.projects.backend.employee.validators.EmploymentTypeConstraint;
 
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Positive;
 
 public class UpdateEmployeeDTO {
 
@@ -48,7 +43,6 @@ public class UpdateEmployeeDTO {
   @EmploymentTypeConstraint
   private String employmentType;
 
-  @DepartmentTypeConstraint
   private String department;
 
   @Pattern(regexp = ".*\\S.*", message = "role should contain at least 1 non-white-space characters")

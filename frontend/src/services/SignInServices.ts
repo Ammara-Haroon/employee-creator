@@ -1,14 +1,12 @@
-import { useDispatch } from "react-redux";
 import { AuthState } from "./APIResponseInterface";
-import axios, { AxiosError, AxiosResponse } from "axios";
-import { AuthTokenState, setToken } from "../features/AuthToken/AuthTokenSlice";
+import axios from "axios";
 import { SERVER_URL } from "./api-config";
 
  
 export interface SignInInfo {
   username: string;
   password: string;
-  _csrf: string | null;
+ 
 }
 export const signIn = async (
   data: SignInInfo,token:any
@@ -20,11 +18,10 @@ try{
   response = await axios.post(SERVER_URL + "/login",data);
  
 }catch(error:any){
-   console.log(error);
   if (error?.response?.status === 403) {
     throw new Error("Access Denied");
-  } else if (error?.response?.status !== 200) {
-    throw new Error("Couldn't sign in");
+  } else if (error) {
+    throw new Error("Bad Username or Password.");
   }
 }
 if (!response?.data.authenticated) {

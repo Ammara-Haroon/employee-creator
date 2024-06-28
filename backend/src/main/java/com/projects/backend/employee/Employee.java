@@ -2,6 +2,9 @@ package com.projects.backend.employee;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.projects.backend.department.Department;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -9,6 +12,8 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -41,7 +46,7 @@ public class Employee {
   @Column(nullable = false)
   @Enumerated(EnumType.STRING)
   private ContractType contractType;
-  
+
   @Column(nullable = false)
   @Temporal(TemporalType.DATE)
   private Date startDate;
@@ -49,19 +54,19 @@ public class Employee {
   @Column(nullable = true)
   @Temporal(TemporalType.DATE)
   private Date finishDate;
-  
+
   @Column(nullable = false)
   @Enumerated(EnumType.STRING)
   private EmploymentType employmentType;
-  
+
   @Column(nullable = false)
   private int hoursPerWeek;
 
-  public DepartmentType getDepartment() {
+  public Department getDepartment() {
     return department;
   }
 
-  public void setDepartment(DepartmentType department) {
+  public void setDepartment(Department department) {
     this.department = department;
   }
 
@@ -73,9 +78,10 @@ public class Employee {
     this.role = role;
   }
 
-  @Column(nullable = false)
-  @Enumerated(EnumType.STRING)
-  private DepartmentType department;
+  @ManyToOne()
+  @JoinColumn(name = "department_id", nullable = false)
+  @JsonIgnoreProperties("employees")
+  private Department department;
 
   @Column(nullable = false)
   private String role;
@@ -180,7 +186,7 @@ public class Employee {
   public String toString() {
     return "Employee [id=" + id + ", firstName=" + firstName + ", middleName=" + middleName + ", lastName=" + lastName
         + ", email=" + email + ", mobileNumber=" + mobileNumber + ", address=" + address + ", contractType="
-        + contractType + ", startDate=" + startDate + ", finsihDate=" + finishDate+ ", employmentType="
+        + contractType + ", startDate=" + startDate + ", finsihDate=" + finishDate + ", employmentType="
         + employmentType + ", hoursPerWeek=" + hoursPerWeek + "]";
   }
 }

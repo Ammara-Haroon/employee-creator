@@ -1,9 +1,6 @@
-import { faAdd } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React, { useState } from "react";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
 import schema from "./schema";
 import DatePicker, { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -11,18 +8,19 @@ import { enAU } from "date-fns/locale/en-AU";
 
 import {
   ContractType,
-  DepartmentType,
   Employee,
+  EmployeeData,
   EmploymentType,
 } from "../../services/APIResponseInterface";
-import { useQueryClient } from "@tanstack/react-query";
 import { Mode } from "../../pages/EmployeeFormPage/Mode";
 import { toTitleCase } from "../../services/utility";
+import { useSelector } from "react-redux";
+import { RootState } from "../../app/store";
 
 registerLocale("en-AU", enAU);
-interface IEmployeeFormProps {
+export interface IEmployeeFormProps {
   mode: Mode;
-  saveEmployee(emp: Employee): unknown;
+  saveEmployee(emp: EmployeeData): unknown;
   employee: Employee | undefined;
 }
 const EmployeeForm = ({ mode, employee, saveEmployee }: IEmployeeFormProps) => {
@@ -30,7 +28,7 @@ const EmployeeForm = ({ mode, employee, saveEmployee }: IEmployeeFormProps) => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<Employee>({
+  } = useForm<EmployeeData>({
     resolver: zodResolver(schema),
     defaultValues: {
       employmentType:
@@ -48,16 +46,18 @@ const EmployeeForm = ({ mode, employee, saveEmployee }: IEmployeeFormProps) => {
       mobileNumber: mode === Mode.EDIT ? employee?.mobileNumber : "",
       role: mode === Mode.EDIT ? employee?.role : "",
       department:
-        mode === Mode.EDIT ? employee?.department : DepartmentType.ADMIN,
+        mode === Mode.EDIT ? employee?.department?.name : undefined,
     },
   });
+  const {departments} = useSelector((state: RootState) => state.departments);
+
   const [startDate, setStartDate] = useState<Date>(
     employee?.startDate || new Date()
   );
   const [finishDate, setFinishDate] = useState<Date | null>(
     employee?.finishDate || null
   );
-  const onSubmit: SubmitHandler<Employee> = (data) => {
+  const onSubmit: SubmitHandler<EmployeeData> = (data) => {
     if (startDate) data.startDate = startDate;
     data.finishDate = finishDate;
     if (data.middleName === "") data.middleName = null;
@@ -175,13 +175,16 @@ const EmployeeForm = ({ mode, employee, saveEmployee }: IEmployeeFormProps) => {
         </div>
         <div className={inputWrapperStyleClass}>
           <label htmlFor="mobileNumber">Mobile Number</label>
+          <div>
+          <p className="inline bg-gray-400 p-2 h-full border-4  border-gray-400">+61</p>
           <input
-            className={inputStyleClass}
+            className={genericInputStyle+ " w-40"}
             type="tel"
             placeholder="04xxxxxxxxxx"
             id="mobileNumber"
             {...register("mobileNumber")}
           />
+          </div>
           {errors.mobileNumber ? (
             <small data-testid="error" className={errorStyleClass}>
               {errors.mobileNumber.message}
@@ -211,21 +214,14 @@ const EmployeeForm = ({ mode, employee, saveEmployee }: IEmployeeFormProps) => {
         <div className={inputWrapperStyleClass}>
           <label htmlFor="department">Department</label>
           <select
-            // defaultValue={employee?.department}
             className={inputStyleClass}
             id="department"
             {...register("department")}
           >
-            <option value={DepartmentType.ADMIN}>
-              {toTitleCase(DepartmentType.ADMIN)}
-            </option>
-            <option value={DepartmentType.FINANCE}>
-              {toTitleCase(DepartmentType.FINANCE)}
-            </option>
-            <option value={DepartmentType.IT}>
-              {DepartmentType.IT.toUpperCase()}
-            </option>
-          </select>
+            {departments.map(dept=><option key = {dept.id} value={dept.name}>
+              {toTitleCase(dept.name)}
+            </option>)}
+           </select>
         </div>
         <div className={inputWrapperStyleClass}>
           <label htmlFor="role">Role</label>

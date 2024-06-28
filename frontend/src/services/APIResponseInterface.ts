@@ -14,25 +14,25 @@ export interface Employee {
   employmentType: EmploymentType;
   hoursPerWeek: number;
   role: string;
-  department: DepartmentType;
+  department: Department ;
+}
+export interface EmployeeData {
+  id: number;
+  firstName: string;
+  middleName: string | null;
+  lastName: string;
+  email: string;
+  mobileNumber: string;
+  address: string;
+  contractType: ContractType;
+  startDate: Date;
+  finishDate: Date | null;
+  employmentType: EmploymentType;
+  hoursPerWeek: number;
+  role: string;
+  department: string;
 }
 
-// export interface QueryParams {
-//   admin: string;
-//   contract: string;
-//   finance: string;
-//   fullTime: string;
-//   it: string;
-//   partTime: string;
-//   permanent: string;
-//   search: string;
-//   currentPage: number;
-//   sortType: SortType;
-// }
-//name
-//contractType
-//employementType
-//finished
 
 export enum EmploymentType {
   PART_TIME = "PART_TIME",
@@ -46,12 +46,6 @@ export enum SortType {
 export enum ContractType {
   PERMANENT = "PERMANENT",
   CONTRACT = "CONTRACT",
-}
-
-export enum DepartmentType {
-  ADMIN = "ADMIN",
-  FINANCE = "FINANCE",
-  IT = "IT",
 }
 export interface AuthState {
   authenticated: boolean;
@@ -68,4 +62,9 @@ export interface EmployeePageResponse {
   numberOfElements: number;
   totalElements: number;
   totalPages: number;
+}
+
+export interface Department {
+  id:number
+  name:string
 }

@@ -1,16 +1,12 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { FormEvent, useEffect, useRef, useState } from "react";
+import { FormEvent, useRef } from "react";
 import { SignInInfo, getCSRF, signIn } from "../../services/SignInServices";
 import { hide, show } from "../../features/Notifcations/NotificationSlice";
 import ErrMsg from "../../components/ErrMsg/ErrMsg";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { logout, updateAuthState } from "../../features/Auth/AuthSlice";
 import { useNavigate } from "react-router-dom";
-import { resetToken, setToken } from "../../features/AuthToken/AuthTokenSlice";
-import { RootState } from "../../app/store";
 import { resetFilterParams } from "../../features/QueryParams/QueryParamsSlice";
 import { useCookies } from 'react-cookie';
-import axios from "axios";
 
 const LoginPage = () => {
 const [cookies, setCookie, removeCookie] = useCookies(['XSRF-TOKEN']);
@@ -22,37 +18,41 @@ const [cookies, setCookie, removeCookie] = useCookies(['XSRF-TOKEN']);
   const inputStyleClass = genericInputStyle + " max-w-1/2 w-80";
 
   const inputWrapperStyleClass = "px-3 flex flex-col";
-  const { token } = useSelector((state: RootState) => state.authToken);
-
+  
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     dispatch(logout());
     dispatch(resetFilterParams());
     dispatch(hide());
- 
-getCSRF().then(() => {
-      signIn(
-        Object.fromEntries(
-          new FormData(formRef.current).entries()
-        ) as SignInInfo,
-        cookies['XSRF-TOKEN']
-      )
-      .then((data) => {
-        dispatch(updateAuthState(data));
-        if (data.authenticated) {
-          dispatch(hide());
-          navigate("/dashboard");
-        } else {
+    
+    getCSRF().then(() => {
+      if(formRef.current) {
+        const obj = Object.fromEntries(new FormData(formRef.current).entries()
+        );
+        console.log(obj);
+        const signInInfo:SignInInfo = {username:obj["username"].toString(),password:obj["password"].toString()};
+        signIn(signInInfo, cookies['XSRF-TOKEN'])
+        .then((data) => {
+          dispatch(updateAuthState(data));
+          if (data.authenticated) {
+            dispatch(hide());
+            navigate("/dashboard");
+          } else {
+            dispatch(logout());
+            dispatch(show("Login Failed. Bad Username or Password"));
+          }
+        })
+        .catch((e: any) => {
           dispatch(logout());
-          dispatch(show("Login Failed. Bad Username or Password"));
-        }
-      })
-      .catch((e: any) => {
+          dispatch(show(e.message)); //"Login Failed. Bad Username or Password"));
+        });
+      }
+    })
+    .catch((e: any) => {
         dispatch(logout());
-        dispatch(show(e.message)); //"Login Failed. Bad Username or Password"));
-      });
-  })
-};
+        dispatch(show(e.message)); //connection error
+    });
+  };
 
   return (
     <div className="bg-gray-100 flex flex-col justify-center items-center border border-black w-screen h-screen">
@@ -94,14 +94,7 @@ getCSRF().then(() => {
             Sign In
           </button>
         </div>
-
-        <input
-          id="_csrf"
-          name="_csrf"
-          type="hidden"
-          value={token || ""}
-        ></input>
-      </form>
+        </form>
     </div>
   );
 };

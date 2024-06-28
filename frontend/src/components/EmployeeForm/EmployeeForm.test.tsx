@@ -1,14 +1,12 @@
 import { userEvent } from "@testing-library/user-event";
-import axios, { AxiosResponse } from "axios";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
 import { vi } from "vitest";
 import { store } from "../../app/store";
 import { updateAuthState } from "../../features/Auth/AuthSlice";
-import EmployeeFormPage from "../../pages/EmployeeFormPage/EmployeeFormPage";
-import { AuthState, Employee } from "../../services/APIResponseInterface";
-import { render, screen, waitFor } from "@testing-library/react";
+import { AuthState } from "../../services/APIResponseInterface";
+import { render, screen } from "@testing-library/react";
 import EmployeeForm from "./EmployeeForm";
 import { Mode } from "../../pages/EmployeeFormPage/Mode";
 

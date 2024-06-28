@@ -6,9 +6,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-import javax.swing.text.html.Option;
-
-import org.apache.coyote.BadRequestException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,12 +13,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException.BadRequest;
 
+import com.projects.backend.department.Department;
+import com.projects.backend.department.DepartmentService;
 import com.projects.backend.factory.EmployeeCreator;
 
 import jakarta.transaction.Transactional;
-import jakarta.validation.Valid;
 import jakarta.validation.ValidationException;
 
 @Service
@@ -29,6 +26,9 @@ import jakarta.validation.ValidationException;
 public class EmployeeService {
   @Autowired
   EmployeeRepository repo;
+
+  @Autowired
+  DepartmentService departmentService;
 
   @Autowired
   ModelMapper mapper;
@@ -74,7 +74,14 @@ public class EmployeeService {
   }
 
   public Optional<Employee> create(CreateEmployeeDTO data) throws ValidationException {
+    List<Department> deptList = this.departmentService.findByName(data.getDepartment());
+
+    if (deptList.size() == 0) {
+      return Optional.empty();
+    }
+
     Employee newEmployee = mapper.map(data, Employee.class);
+    newEmployee.setDepartment(deptList.get(0));
     if (newEmployee.getFinishDate() != null && newEmployee.getStartDate().compareTo(newEmployee.getFinishDate()) > 0) {
       throw new ValidationException("finish date cannot be before start date");
     }
@@ -84,16 +91,24 @@ public class EmployeeService {
 
   public Optional<Employee> updateById(Long id, UpdateEmployeeDTO data) throws ValidationException {
     Optional<Employee> maybeEmployee = this.repo.findById(id);
-    if (maybeEmployee.isPresent()) {
-      Employee foundEmployee = maybeEmployee.get();
-      mapper.map(data, foundEmployee);
-      if (foundEmployee.getFinishDate() != null
-          && foundEmployee.getStartDate().compareTo(foundEmployee.getFinishDate()) > 0) {
-        throw new ValidationException("finish date cannot be before start date");
-      }
-      return Optional.of(this.repo.save(foundEmployee));
+    if (maybeEmployee.isEmpty()) {
+      return Optional.empty();
     }
-    return maybeEmployee;
+    List<Department> deptList = this.departmentService.findByName(data.getDepartment());
+    if (deptList.size() == 0) {
+      return Optional.empty();
+    }
+
+    Employee foundEmployee = maybeEmployee.get();
+    mapper.map(data, foundEmployee);
+    foundEmployee.setDepartment(deptList.get(0));
+
+    if (foundEmployee.getFinishDate() != null
+        && foundEmployee.getStartDate().compareTo(foundEmployee.getFinishDate()) > 0) {
+      throw new ValidationException("finish date cannot be before start date");
+    }
+    return Optional.of(this.repo.save(foundEmployee));
+
   }
 
   public void setUpEmployeeDatabase() {

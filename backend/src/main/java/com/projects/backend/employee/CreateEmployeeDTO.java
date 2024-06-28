@@ -8,11 +8,8 @@ import java.util.Date;
 import org.hibernate.validator.constraints.Length;
 
 import com.projects.backend.employee.validators.ContractTypeConstraint;
-import com.projects.backend.employee.validators.DepartmentTypeConstraint;
 import com.projects.backend.employee.validators.EmploymentTypeConstraint;
 
-import jakarta.validation.ValidationException;
-import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -59,7 +56,6 @@ public class CreateEmployeeDTO {
   }
 
   @NotBlank
-  @DepartmentTypeConstraint
   private String department;
 
   @NotBlank

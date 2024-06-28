@@ -11,6 +11,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.projects.backend.department.Department;
 import com.projects.backend.employee.ContractType;
 import com.projects.backend.employee.Employee;
 import com.projects.backend.employee.CreateEmployeeDTO;
@@ -43,6 +44,9 @@ public class CreateEmployeeTests {
 
   @BeforeEach
   public void setupService() {
+    Department dept = new Department();
+    dept.setId(Long.valueOf(1));
+    dept.setName("ADMIN");
     Employee emp = new Employee();
     emp.setId(Long.valueOf(1));
     emp.setFirstName("John");
@@ -55,7 +59,7 @@ public class CreateEmployeeTests {
     emp.setStartDate(new Date());
     emp.setEmploymentType(EmploymentType.PART_TIME);
     emp.setHoursPerWeek(40);
-    emp.setDepartment(DepartmentType.ADMIN);
+    emp.setDepartment(dept);
     emp.setRole("admin");
     try {
       when(this.employeeService.create(any(CreateEmployeeDTO.class))).thenReturn(Optional.of(emp));
