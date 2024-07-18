@@ -145,7 +145,7 @@ The project was implemented with these goals in mind and the main purpose was to
 ## Future Goals
 
 - Normalize Employee entity
-- Integrate CSRF Token authorization
+- Integrate CSRF Token authorization -- *done*
 - Integrate JWT Token authorization
 
 ## Change logs
