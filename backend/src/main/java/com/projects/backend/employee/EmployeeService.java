@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 
 import com.projects.backend.department.Department;
 import com.projects.backend.department.DepartmentService;
-import com.projects.backend.factory.EmployeeCreator;
+
 
 import jakarta.transaction.Transactional;
 import jakarta.validation.ValidationException;
@@ -112,8 +112,8 @@ public class EmployeeService {
 
   }
 
-  public void setUpEmployeeDatabase() {
-    new EmployeeCreator(this.repo);
-  }
+  // public void setUpEmployeeDatabase() {
+  //   new EmployeeCreator(this.repo);
+  // }
 
 }

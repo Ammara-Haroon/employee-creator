@@ -18,6 +18,7 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 import org.springframework.security.web.csrf.CsrfTokenRequestHandler;
@@ -32,12 +33,11 @@ public class SecurityConfig {
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-        // http.csrf(csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-        // 		.csrfTokenRequestHandler(new SpaCsrfTokenRequestHandler())).formLogin(
-        // 				form -> form.loginPage("https://employee-dashboard-frontend-hf6q6wxeca-ts.a.run.app/"));
+    http.csrf(csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+        		.csrfTokenRequestHandler(new SpaCsrfTokenRequestHandler())).formLogin(
+        				form -> form.loginPage("http://localhost:5173"));
 
-    http.csrf(csrf -> csrf.disable()).formLogin(form -> form.loginPage("https://employee-dashboard-frontend-hf6q6wxeca-ts.a.run.app/"));
-		
+  	
 		return http.build();
 	}
 

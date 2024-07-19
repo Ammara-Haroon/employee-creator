@@ -64,7 +64,7 @@ export const getAllEmployees = async (
     startDate: new Date(entry.startDate),
     finishDate: entry.finishDate && new Date(entry.finishDate),
   }));
-  console.log(data);
+
   return data;
 };
 
