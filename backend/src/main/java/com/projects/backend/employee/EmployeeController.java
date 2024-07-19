@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpClientErrorException.BadRequest;
 
 import com.projects.backend.exceptions.NotFoundException;
+import com.projects.backend.factory.EmployeeCreator;
 
 import jakarta.validation.Valid;
 import jakarta.validation.ValidationException;
@@ -34,6 +35,7 @@ public class EmployeeController {
   public ResponseEntity<Page<Employee>> findAllEmployees(@RequestParam String name, @RequestParam String department,
       @RequestParam String employmentType, @RequestParam String contractType, @RequestParam int page,
       @RequestParam(required = true, name = "sort") String sort) {
+    
     Page<Employee> allEmployees = this.employeeService.findAll(name, department, employmentType, contractType, page,
         sort);
     return new ResponseEntity<>(allEmployees, HttpStatus.OK);

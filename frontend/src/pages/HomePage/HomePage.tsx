@@ -1,5 +1,8 @@
 import { FormEvent, MouseEvent, useEffect, useRef } from "react";
-import { getAllDepartments, getAllEmployees } from "../../services/EmployeeServices";
+import {
+  getAllDepartments,
+  getAllEmployees,
+} from "../../services/EmployeeServices";
 import { useQuery } from "react-query";
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 import ErrMsg from "../../components/ErrMsg/ErrMsg";
@@ -48,7 +51,7 @@ const HomePage = () => {
   }
 
   const queryParams = useSelector((state: RootState) => state.queryParams);
-  const {departments} = useSelector((state: RootState) => state.departments);
+  const { departments } = useSelector((state: RootState) => state.departments);
   const { isLoading, isError, data } = useQuery({
     queryKey: ["employees", queryParams],
     queryFn: () => getAllEmployees(queryParams),
@@ -56,17 +59,19 @@ const HomePage = () => {
     retry: false,
     keepPreviousData: true,
   });
-  useEffect(()=>{
-    try{
-      getAllDepartments().then((deptList)=>dispatch(setDepartments(deptList)));
-    } catch(error:any) {
+  useEffect(() => {
+    try {
+      getAllDepartments().then((deptList) =>
+        dispatch(setDepartments(deptList))
+      );
+    } catch (error: any) {
       dispatch(show(error.message));
     }
-  },[]);
+  }, []);
 
-  useEffect(()=>{
+  useEffect(() => {
     dispatch(updateTotalNumberOfPages(data?.totalPages));
-  },[data]);
+  }, [data]);
 
   const handleClick = (): void => {
     navigate("/add");
@@ -92,7 +97,7 @@ const HomePage = () => {
       )
     );
   };
-    return(
+  return (
     <div className="bg-gray-200">
       <div className="py-5 px-2  flex justify-between flex-wrap">
         <h1 className="text-2xl font-bold text-cyan-900 uppercase ">
@@ -126,31 +131,43 @@ const HomePage = () => {
             Search For :
           </label>
           <div>
-          <input
-            className={inputStyleClass}
-            id="search"
-            type="text"
-            name="search"
-            minLength={1}
-            ref={searchRef}
-          />
-          <button className="hover:text-teal-500 text-cyan-800 p-1" onClick={()=>{searchRef.current ? searchRef.current.value="":null;}}>x</button>
+            <input
+              className={inputStyleClass}
+              id="search"
+              type="text"
+              name="search"
+              minLength={1}
+              ref={searchRef}
+            />
+            <span
+              className="hover:text-teal-500 text-cyan-800 p-1"
+              onClick={() => {
+                searchRef.current ? (searchRef.current.value = "") : null;
+              }}
+            >
+              x
+            </span>
           </div>
         </div>
         <div className="text-sm text-slate-800 flex justify-around text-right">
           <div className={checkBoxGroupStyleClass}>
-            {departments && departments.map((dept)=>(<div key={dept.id} className={checkBoxStyleClass}>
-              <label htmlFor={dept.name.toLowerCase()}>{toTitleCase(dept.name)}</label>
-              <input
-                className="mx-1"
-                defaultChecked={true}
-                type="checkbox"
-                id={dept.name.toLowerCase()}
-                name={dept.name.toLowerCase()}
-                value={dept.name}
-              />
-            </div>))}
-           </div>
+            {departments &&
+              departments.map((dept) => (
+                <div key={dept.id} className={checkBoxStyleClass}>
+                  <label htmlFor={dept.name.toLowerCase()}>
+                    {toTitleCase(dept.name)}
+                  </label>
+                  <input
+                    className="mx-1"
+                    defaultChecked={true}
+                    type="checkbox"
+                    id={dept.name.toLowerCase()}
+                    name={dept.name.toLowerCase()}
+                    value={dept.name}
+                  />
+                </div>
+              ))}
+          </div>
           <div className={checkBoxGroupStyleClass}>
             <div className={checkBoxStyleClass}>
               <label htmlFor="permanent">Permanent</label>

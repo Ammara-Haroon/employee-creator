@@ -39,6 +39,7 @@ public class EmployeeService {
 
   public Page<Employee> findAll(String name, String department, String employmentType, String contractType, int page,
       String sortType) {
+    
     int NUMBER_OF_EMPLOPYEES_PER_PAGE = 20;
 
     Sort sort;

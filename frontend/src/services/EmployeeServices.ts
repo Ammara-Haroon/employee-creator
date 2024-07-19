@@ -1,6 +1,11 @@
 import axios from "axios";
 import { QueryParamsState } from "../features/QueryParams/QueryParamsSlice";
-import { Department, Employee, EmployeeData, EmployeePageResponse } from "./APIResponseInterface";
+import {
+  Department,
+  Employee,
+  EmployeeData,
+  EmployeePageResponse,
+} from "./APIResponseInterface";
 import { SERVER_URL } from "./api-config";
 
 export const getQueryParamsString = (
@@ -59,6 +64,7 @@ export const getAllEmployees = async (
     startDate: new Date(entry.startDate),
     finishDate: entry.finishDate && new Date(entry.finishDate),
   }));
+  console.log(data);
   return data;
 };
 
@@ -80,12 +86,8 @@ export const updateEmployee = async (data: EmployeeData): Promise<Employee> => {
   return response.data;
 };
 
-
-export const getAllDepartments = async (
-): Promise<Department[]> => {
-  const response = await axios.get(
-    `${SERVER_URL}/departments`
-  );
+export const getAllDepartments = async (): Promise<Department[]> => {
+  const response = await axios.get(`${SERVER_URL}/departments`);
   const data = response.data;
   return data;
 };
